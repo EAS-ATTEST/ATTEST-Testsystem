@@ -7,6 +7,11 @@ on:
 
   workflow_dispatch: # Enable manual action trigger
 
+env:
+  PYTHONPATH: .:./tests/integration_tests
+  RTS_ROOT: .
+  GIT_PYTHON_REFRESH: quiet
+
 jobs:
   build_documentation_for_github_pages:
     runs-on: ubuntu-latest
