@@ -53,7 +53,7 @@ docker run --rm -t rts:latest python3 main.py --help
 ```
 
 ## Documentation
-For comprehensive documentation, please visit the [project website](TODO).
+For comprehensive documentation, please visit the [project website](https://eas-attest.github.io/ATTEST-Testsystem/index.html).
 
 Or you build the documentation locally by running the following command after you have the docker image ready. The documentation will be generated in the current working directory.
 
