@@ -24,7 +24,7 @@ jobs:
           python-version: '3.8'
           cache: 'pip' # caching pip dependencies
       - run: pip install -r requirements.txt
-      - run: python3 -m sphinx . _build
+      - run: python3 -m sphinx . doc_build
       - name: publish doc
         shell: bash
         run: |
