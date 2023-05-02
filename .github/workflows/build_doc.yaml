@@ -23,3 +23,12 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - run: pip install -r requirements.txt
       - run: python3 -m sphinx . _build
+      - name: publish doc
+        shell: bash
+        run: |
+          git checkout gh-pages
+          git config user.name "GitHub Action"
+          git config user.email "no@mail.tmp"
+          git add doc_build/
+          git commit -m "Doc build"
+          git push
