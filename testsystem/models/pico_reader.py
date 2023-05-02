@@ -30,8 +30,11 @@ from .pico_scope import PicoScope
 from .channel_reader import ChannelReader
 from testsystem.exceptions import PicoError
 from testsystem.constants import PICO_LOGIC_THRESHOLD_VOLTAGE
-from picosdk.ps2000a import ps2000a as ps
 
+try:
+    from picosdk.ps2000a import ps2000a as ps
+except:
+    print("[WARNING] Could not import picosdk.")
 
 def pico_success(status):
     if status != 0:

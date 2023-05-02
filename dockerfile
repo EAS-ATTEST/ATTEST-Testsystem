@@ -76,14 +76,7 @@ RUN git checkout 2daf8e68edc29b54eb0e17e64f4d1d7492e7c260
 RUN python3 setup.py install
 
 # Install packages
-RUN apt-get update && apt-get install -y srecord usbutils
-
-# Install python packages
-RUN pip install pyserial "SQLAlchemy~=1.4.0" sphinx sphinx-rtd-theme numpy gitpython pandas
-
-# Install development packages
-RUN apt-get update && apt-get install -y sqlite
-RUN pip install pytest pytest-cov black matplotlib tqdm
+RUN apt-get update && apt-get install -y srecord usbutils sqlite
 
 # Add host directory
 WORKDIR /host
@@ -100,9 +93,13 @@ COPY Makefile ./
 COPY doc/ ./doc/
 COPY tests/ ./tests/
 COPY testsystem/ ./testsystem/
+COPY requirements.txt ./
 
-RUN git config --global user.email "testsystem@iti-tugraz.com"
-RUN git config --global user.name "RTOS Test System"
+# Install python packages
+RUN pip install -r requirements.txt
+
+RUN git config --global user.email "attest@testsystem.com"
+RUN git config --global user.name "ATTEST-Testsystem"
 
 ENV PYTHONPATH=/testsystem:/testsystem/tests/integration_tests
 ENV OS=unix

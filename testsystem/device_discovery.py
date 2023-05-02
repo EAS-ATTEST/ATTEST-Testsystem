@@ -25,11 +25,14 @@ import ctypes
 import logging
 
 from serial.tools.list_ports import comports
-from picosdk.ps2000a import ps2000a as ps
 from testsystem.models import MSP430, PicoScope
 from testsystem.constants import PICO_ERROR_CODES
 from testsystem.exceptions import MSPError
 
+try:
+    from picosdk.ps2000a import ps2000a as ps
+except:
+    print("[WARNING] Could not import picosdk.")
 
 def discover_msp_boards() -> list[MSP430]:
     """

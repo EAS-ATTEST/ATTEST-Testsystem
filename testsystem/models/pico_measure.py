@@ -35,11 +35,15 @@ from testsystem.constants import (
     PICO_CLOCK_SAMPLING_NS,
     TEST_TIMING_CLK_DEVIDER,
 )
-from picosdk.ps2000a import (
-    ps2000a as ps,
-    PS2000A_TRIGGER_CONDITIONS,
-    PS2000A_DIGITAL_CHANNEL_DIRECTIONS,
-)
+
+try:
+    from picosdk.ps2000a import (
+        ps2000a as ps,
+        PS2000A_TRIGGER_CONDITIONS,
+        PS2000A_DIGITAL_CHANNEL_DIRECTIONS,
+    )
+except:
+    print("[WARNING] Could not import picosdk.")
 
 pico_lock = threading.Lock()
 
