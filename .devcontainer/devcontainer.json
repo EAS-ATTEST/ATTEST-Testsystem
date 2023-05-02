@@ -1,0 +1,34 @@
+{
+	"name": "Existing Dockerfile",
+	"context": "..",
+	"dockerFile": "../dockerfile",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"mhutchie.git-graph",
+				"ms-vscode.cpptools-extension-pack",
+				"ms-vscode.makefile-tools",
+				"alexcvzz.vscode-sqlite",
+				"pejmannikram.vscode-auto-scroll",
+				"albymor.increment-selection",
+				"eamodio.gitlens",
+				"ms-python.black-formatter"
+			]
+		}
+	},
+	"runArgs": [
+		//"--device=/dev/ttyACM0",
+		//"--device=/dev/ttyACM1",
+		//"--device=/dev/bus/usb/001/005"
+	],
+	"postCreateCommand": "git config --global --add safe.directory /workspaces/ATTEST-Testsystem && git config --global --unset user.email && git config --global --unset user.name",
+	"containerEnv": {
+		"PYTHONPATH": "/workspaces/ATTEST-Testsystem:/workspaces/ATTEST-Testsystem/tests/integration_tests",
+		"RTS_ROOT": "/workspaces/ATTEST-Testsystem",
+		"RTS_LOG_FILE": "testsystem.log",
+		"RTS_DB_FILE": "testsystem.db",
+		"RTS_CONF_FILE": "testsystem.json",
+		"RTS_TC_ROOT_PATH": "/workspaces/ATTEST-Testsystem/testcases"
+	}
+}

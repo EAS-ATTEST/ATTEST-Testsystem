@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Unit Test: Coverage",
+            "type": "shell",
+            "command": "python3 -m pytest tests/unit_tests --cov --cov-config=.coveragerc --cov-report term --cov-report html && chown -R 1000:1000 ${workspaceFolder}/htmlcov/ && chmod -R 775 ${workspaceFolder}/htmlcov"
+        },
+        {
+            "label": "Start Testsystem",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/main.py"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Unittests",
+            "type": "shell",
+            "command": "pytest",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Documentation",
+            "type": "shell",
+            "command": "make html && chown -R 1000:1000 ${workspaceFolder}/_build/html/ && chmod -R 775 ${workspaceFolder}/_build/html"
+        }
+    ]
+}
