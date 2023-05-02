@@ -1,0 +1,20 @@
+name: Build documentation for GitHub Pages 
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch: # Enable manual action trigger
+
+jobs:
+  build_documentation_for_github_pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+      - run: python3 -m sphinx . _build
