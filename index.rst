@@ -9,6 +9,8 @@ Welcome to RTOS Test System documentation!
 .. toctree::
    :maxdepth: 1
 
+   RTOS Testsystem is a python-based test system for the Real-Time Operating Systems course in the `Embedde Automotive Systems <https://iti.tugraz.at/eas>`_ group at the `Institut of Technical Informatics <https://www.tugraz.at/en/institutes/iti/home>`_ at `Graz University of Technology <https://www.tugraz.at/home>`_. It was revised from scratch in the winter term of 2022 to improve its performance and functionality. The system utilizes dedicated external hardware for testing to guarantee precise and reliable results. It is firmly git-oriented to embed its functionality in the best possible way.
+
    doc/getting_started
    doc/testsystem
    doc/configuration

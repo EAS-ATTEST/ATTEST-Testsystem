@@ -1,9 +1,7 @@
 # ATTEST: Automated and Thorough Testing of Embedded Software in Teaching
 RTOS Testsystem is a python-based test system for the Real-Time Operating Systems course in the [Embedded Automotive Systems](https://iti.tugraz.at/eas) group at the [Institute of Technical Informatics](https://www.tugraz.at/en/institutes/iti/home) at [Graz University of Technology](https://www.tugraz.at/home). It was
 revised from scratch in the winter term of 2022 to improve its performance and
-functionality. The system utilizes dedicated external hardware for testing to guarantee
-precise and reliable results. It is firmly git-oriented to embed its functionality in
-the best possible way.
+functionality. The system utilizes dedicated external hardware for testing to guarantee precise and reliable results. It is firmly git-oriented to embed its functionality in the best possible way.
 
 ## Getting started
 

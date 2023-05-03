@@ -5,8 +5,13 @@
         "--preview"
     ],
     "editor.rulers": [
-        88
+        80
     ],
+    "[python]": {
+        "editor.rulers": [
+            88
+        ]
+    },
     "files.eol": "\n",
     "files.associations": {
         "msp430f5529.h": "c",

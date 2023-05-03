@@ -2,7 +2,7 @@
 Testsystem
 ==========
 
-RTOS Testsystem is a python-based test system for the Real-Time Operating Systems 
+ATTEST is a python-based test system for the Real-Time Operating Systems 
 course at the Institute of Technical Informatics. It was revised from scratch in the 
 winter term of 2022 to improve its performance and functionality. The system utilizes 
 special external hardware for testing to guarantee precise and reliable results. It is 
