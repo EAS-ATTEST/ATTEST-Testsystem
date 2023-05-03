@@ -36,7 +36,8 @@ author = 'Kissich, M.; Weinbauer, K.; Baunach, M.'
 
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.githubpages'
 ]
 
 templates_path = ['_templates']
