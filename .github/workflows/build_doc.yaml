@@ -28,11 +28,8 @@ jobs:
       - name: publish doc
         shell: bash
         run: |
-          git stash
-          git checkout gh-pages
-          git stash pop
           git config user.name "GitHub Action"
           git config user.email "no@mail.tmp"
           git add docs/
           git commit -m "Doc build"
-          git push
+          git push origin `git subtree split --prefix docs/ main`:gh-pages
