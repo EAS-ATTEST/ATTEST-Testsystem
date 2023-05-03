@@ -76,7 +76,7 @@ RUN git checkout 2daf8e68edc29b54eb0e17e64f4d1d7492e7c260
 RUN python3 setup.py install
 
 # Install packages
-RUN apt-get update && apt-get install -y srecord usbutils sqlite
+RUN apt-get update && apt-get install -y srecord usbutils sqlite ssh
 
 # Add host directory
 WORKDIR /host
@@ -106,3 +106,4 @@ ENV OS=unix
 ENV INCLUDES=/opt/ti/msp430-gcc/include/
 ENV FLASHTOOL_MSP430=MSP430Flasher
 ENV RTS_ROOT=/testsystem
+ENV LC_ALL=C
