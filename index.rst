@@ -7,7 +7,7 @@ Welcome to RTOS Test System documentation!
 ============================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    doc/getting_started
    doc/testsystem
