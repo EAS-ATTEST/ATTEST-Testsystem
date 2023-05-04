@@ -24,10 +24,9 @@ import os
 from .pico_status_constants import PICO_ERROR_CODES
 
 TESTSYSTEM_ROOT = os.environ.get("RTS_ROOT")
-assert TESTSYSTEM_ROOT is not None, (
-    "Define a path to the test system root directory. Use the RTS_ROOT environment"
-    " variable to do that."
-)
+if TESTSYSTEM_ROOT is None:
+    print("[WARNING] Define a path to the test system root directory. Use the RTS_ROOT environment variable to do that.")
+    TESTSYSTEM_ROOT = "."
 
 TESTSYSTEM_TITLE = r"""  _____ _______ ____   _____   _______        _                 _
  |  __ \__   __/ __ \ / ____| |__   __|      | |               | |
