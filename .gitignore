@@ -29,6 +29,7 @@ testreports/**
 old/
 htmlcov/
 tests/artefacts/
+venv/
 
 testsystem/*/*.txt
 testsystem/*/*.d

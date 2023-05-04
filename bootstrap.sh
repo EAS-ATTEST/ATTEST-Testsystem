@@ -26,7 +26,7 @@
 
 DOCKER_IMAGE_NAME="rts"
 DOCKER_IMAGE_TAG="latest"
-DOCKER_FILE_NAME="dockerfile"
+DOCKER_FILE="dockerfile"
 DOCKER_CONTAINER_NAME="rts"
 # Path to the ssh directory for the test system user on the host
 SSH_PATH="/rtos/.ssh"
@@ -37,11 +37,22 @@ PICO_SCOPE_USB_NAME="PicoScope"
 
 ##################### END ######################
 
-ROOT_DIRECTORY="$(dirname "$(realpath "${BASH_SOURCE:-$0}")")"
-COMMAND_PARAM="$1 $2 $3 $4 $5 $6 $7 $8"
+DOCKER_BUILD_CONTEXT="."
+DOCKER_RUN_ARGS=""
 DOCKER_MODE="-it"
 
-if [ $# -eq 0 ]
+while test $# -gt 0
+do 
+  case "$1" in
+    (--dockerfile) DOCKER_FILE="$2"
+      shift
+      ;;
+    (*) DOCKER_RUN_ARGS="$DOCKER_RUN_ARGS $1"
+  esac
+  shift
+done
+
+if [ -z $DOCKER_RUN_ARGS ]
 then
   DOCKER_MODE="-d"
 fi
@@ -64,7 +75,7 @@ else
 fi
 
 echo "[INFO] Building docker image..."
-docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG "$ROOT_DIRECTORY" -f $DOCKER_FILE_NAME
+docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG "$DOCKER_BUILD_CONTEXT" -f $DOCKER_FILE
 if [ $? -ne 0 ]; then
   echo "[ERROR] Building docker image failed."
   exit 2
@@ -117,8 +128,8 @@ start_container() {
   echo "[INFO]    Arguments: $ARGS"
   echo "[INFO]    Image: $IMG"
   echo "[INFO]    Command: $CMD"
-  echo "[INFO]    Command Parameters: $COMMAND_PARAM"
-  docker run $ARGS $IMG $CMD $COMMAND_PARAM
+  echo "[INFO]    Command Parameters: $DOCKER_RUN_ARGS"
+  docker run $ARGS $IMG $CMD $DOCKER_RUN_ARGS
   DOCKER_RET_CODE=$?
   echo "[INFO] Container started. Use 'docker attach rts' to interact with the testsystem or 'docker attach --sig-proxy=false rts' to inspect the log output."
 }
