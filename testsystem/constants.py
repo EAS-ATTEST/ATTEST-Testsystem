@@ -1,21 +1,21 @@
 #
 # Copyright 2023 EAS Group
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-# software and associated documentation files (the “Software”), to deal in the Software 
-# without restriction, including without limitation the rights to use, copy, modify, 
-# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-# permit persons to whom the Software is furnished to do so, subject to the following 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the “Software”), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to the following
 # conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies 
+# The above copyright notice and this permission notice shall be included in all copies
 # or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
@@ -25,7 +25,10 @@ from .pico_status_constants import PICO_ERROR_CODES
 
 TESTSYSTEM_ROOT = os.environ.get("RTS_ROOT")
 if TESTSYSTEM_ROOT is None:
-    print("[WARNING] Define a path to the test system root directory. Use the RTS_ROOT environment variable to do that.")
+    print(
+        "[WARNING] Define a path to the test system root directory. Use the RTS_ROOT"
+        " environment variable to do that."
+    )
     TESTSYSTEM_ROOT = "."
 
 TESTSYSTEM_TITLE = r"""  _____ _______ ____   _____   _______        _                 _
@@ -49,6 +52,7 @@ LEGACY_TASK_PRIO = 5
 FORCE_TEST_TAG_PRIO = 25
 MSP430_FLASHER_TIMEOUT_S = 20
 DB_CONN_TIMEOUT_S = 20
+TU_UNAVAILABLE_RETRY_INTERVAL_S = 600
 
 CONFIG_CACHE_TIME_S = 10
 GIT_PUBLIC_CACHE_TIME_S = 600
