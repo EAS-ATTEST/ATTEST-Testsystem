@@ -1,6 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "python.formatting.provider": "black",
+    "python.formatting.provider": "none",
     "python.formatting.blackArgs": [
         "--preview"
     ],
@@ -10,7 +10,9 @@
     "[python]": {
         "editor.rulers": [
             88
-        ]
+        ],
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
     },
     "files.eol": "\n",
     "files.associations": {
