@@ -62,8 +62,8 @@ def _create_markdown_report_for_test_result(test_result: TestResult) -> str:
     unicode_check = "&#x2705;"
     success_status = unicode_cross
     if test_result.successful:
-        if test_result.evaluate:
-            if test_result.evaluation_value > 0:
+        if test_result.contribute_to_score:
+            if test_result.score > 0:
                 success_status = unicode_check
         else:
             success_status = unicode_check
@@ -138,9 +138,9 @@ def _get_group_table(groups: list[Group], config: cnf.Config) -> str:
             sum_cnt = 0
             for r in test_set.test_results:
                 assert r.tc_def is not None
-                if r.evaluate:
+                if r.contribute_to_score:
                     sum_cnt += 1
-                    success_cnt += r.evaluation_value
+                    success_cnt += r.score
             md_table += (
                 f"|{group.group_nr}|{priority}|[{link_name}]({link})|[{success_cnt} of"
                 f" {sum_cnt} successful](./reports/{group.group_name}/)|\n"
@@ -245,8 +245,8 @@ class GroupStats:
                 tc_def = result.tc_def
                 if tc_def is None:
                     continue
-                if result.evaluate:
-                    result_value = result.evaluation_value
+                if result.contribute_to_score:
+                    result_value = result.score
                     self._exercise_results[tc_def.exercise_nr] += result_value
                     self._total += int(result_value)
         self._group = group

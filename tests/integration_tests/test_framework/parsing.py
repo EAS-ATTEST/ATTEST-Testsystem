@@ -1,21 +1,21 @@
 #
 # Copyright 2023 EAS Group
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-# software and associated documentation files (the “Software”), to deal in the Software 
-# without restriction, including without limitation the rights to use, copy, modify, 
-# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-# permit persons to whom the Software is furnished to do so, subject to the following 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the “Software”), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to the following
 # conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies 
+# The above copyright notice and this permission notice shall be included in all copies
 # or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
@@ -43,7 +43,7 @@ _gr_exercise_regex = (
     r"## Exercise (?P<exercise_nr>[0-9]+)(?P<exercise_content>[\s\S.]*?(?:(?=##"
     r" Exercise)|\Z))"
 )
-_gr_tc_regex = r"\|(?P<tc_id>[0-9]{1,3})\|.*\|(?P<successful>(?:True|False))\|(?P<result>[0-9.,None]*)\|"
+_gr_tc_regex = r"\|(?P<tc_id>[0-9]{1,3})\|.*\|(?P<successful>(?:Completed|Failed))\|(?P<result>[0-9.,None]*)\|"
 
 
 class SysReportGroupResult:
@@ -251,7 +251,7 @@ def parse_group_report(content: str) -> DetailedGroupResult | None:
         for tc_match in tc_matches:
             tc_dict = tc_match.groupdict()
             tc_id = int(tc_dict["tc_id"])
-            successful = ts.to_bool(tc_dict["successful"])
+            successful = tc_dict["successful"] == "Completed"
             result_str = tc_dict["result"]
             if result_str == "None":
                 result = None

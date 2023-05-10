@@ -1,21 +1,21 @@
 #
 # Copyright 2023 EAS Group
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-# software and associated documentation files (the “Software”), to deal in the Software 
-# without restriction, including without limitation the rights to use, copy, modify, 
-# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-# permit persons to whom the Software is furnished to do so, subject to the following 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the “Software”), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to the following
 # conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies 
+# The above copyright notice and this permission notice shall be included in all copies
 # or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
@@ -23,8 +23,28 @@ import pytest
 import time
 import unittest.mock as mock
 import testsystem as ts
+from testsystem.models.test_case_def import is_score_tc
 import testsystem.reporting as reporting
 import test_framework.parsing as parsing
+
+
+def mock_TestCaseDef(id=0, description="", exercise_nr=0, timing=False, size=False):
+    tc_def = mock.MagicMock()
+    tc_def.id = id
+    tc_def.description = description
+    tc_def.exercise_nr = exercise_nr
+    tc_def.timing = timing
+    tc_def.size = size
+    return tc_def
+
+
+def mock_TestResult(successful=True, tc_def=None, score=1):
+    test_result = mock.MagicMock()
+    test_result.successful = successful
+    test_result.tc_def = mock_TestCaseDef() if tc_def is None else tc_def
+    test_result.contribute_to_score = is_score_tc(test_result.tc_def)
+    test_result.score = score
+    return test_result
 
 
 def test_parse_sys_report_group_result():
@@ -36,9 +56,9 @@ def test_parse_sys_report_group_result():
     group1 = ts.Group(group_nr=11, group_name=group_name1, term=term, active=True)
     group2 = ts.Group(group_nr=12, group_name=group_name2, term=term, active=True)
     group3 = ts.Group(group_nr=13, group_name=group_name3, term=term, active=True)
-    test_result_1_1 = ts.TestResult(successful=True)
-    test_result_2_1 = ts.TestResult(successful=False)
-    test_result_2_2 = ts.TestResult(successful=True)
+    test_result_1_1 = mock_TestResult(successful=True, score=1)
+    test_result_2_1 = mock_TestResult(successful=False, score=0)
+    test_result_2_2 = mock_TestResult(successful=True, score=1)
     test_set_1 = ts.TestSet(commit_hash="0011AABB", commit_message="Commit 1")
     test_set_1.test_results = [test_result_1_1]
     test_set_2 = ts.TestSet(commit_hash="ccdd3344", commit_message="Commit 1")
@@ -68,7 +88,7 @@ def test_parse_sys_report_group_result():
     assert 12 == results[1].group_nr
 
 
-@mock.patch("testsystem.models.test_result.TestCaseDef.get_all")
+@mock.patch("testsystem.models.test_case_def.get_all")
 def test_parse_detailed_group_report(m_get_tcds):
     # Arrange
     group_nr = 1
@@ -107,17 +127,17 @@ def test_parse_detailed_group_report(m_get_tcds):
         assert test_results[i].successful == result.test_case_results[i].successful
 
 
-@mock.patch("testsystem.models.test_result.TestCaseDef.get_all")
+@mock.patch("testsystem.models.test_case_def.get_all")
 @mock.patch("testsystem.reporting.Group.get_by_term")
 def test_parse_group_report(m_group_by_term, m_get_tcds):
     # Arrange
     group_nr = 1
     group_name = ts.Group.get_name(group_nr, "SS00")
     group = ts.Group(group_nr=group_nr, group_name=group_name)
-    tc_def_1 = ts.TestCaseDef(id=10, exercise_nr=1)
-    tc_def_2 = ts.TestCaseDef(id=11, exercise_nr=1)
-    tc_def_3 = ts.TestCaseDef(id=20, exercise_nr=2)
-    tc_def_4 = ts.TestCaseDef(id=30, exercise_nr=3)
+    tc_def_1 = mock_TestCaseDef(id=10, exercise_nr=1, description="Test Case 10")
+    tc_def_2 = mock_TestCaseDef(id=11, exercise_nr=1, description="Test Case 11")
+    tc_def_3 = mock_TestCaseDef(id=20, exercise_nr=2, description="Test Case 20")
+    tc_def_4 = mock_TestCaseDef(id=30, exercise_nr=3, description="Test Case 30")
     m_get_tcds.return_value = [tc_def_1, tc_def_2, tc_def_3, tc_def_4]
     test_result_1 = ts.TestResult(id=0, result=1, test_case_id=10, successful=True)
     test_result_2 = ts.TestResult(id=1, result=0, test_case_id=11, successful=False)
