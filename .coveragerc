@@ -1,0 +1,6 @@
+[run]
+omit = tests/*,/usr/*
+branch = true
+
+[report]
+skip_empty = true
