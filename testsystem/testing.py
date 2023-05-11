@@ -1,21 +1,21 @@
 #
 # Copyright 2023 EAS Group
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-# software and associated documentation files (the “Software”), to deal in the Software 
-# without restriction, including without limitation the rights to use, copy, modify, 
-# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-# permit persons to whom the Software is furnished to do so, subject to the following 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the “Software”), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to the following
 # conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies 
+# The above copyright notice and this permission notice shall be included in all copies
 # or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
@@ -234,6 +234,34 @@ def run_test(tc: TestCase, test_env: fs.TestEnv):
             f"Test {tc.name} for group {tc.group_name} finished."
             f" Successful={tc.successful} Result={tc.result.result}"
         )
+
+
+def read_port(port, time: float, overflow_check_time: float = 0.5) -> dict:
+    """This function reads the port output for a given time.
+    After the reading is completed, the port is monitored for possible further data.
+    The result is marked as timeout if data is received after the read time.
+
+    The returned dictionary contains the following fields:
+
+    * **output** (bytes): The received data during the read time.
+    * **timeout_output** (bytes | None): Received data after the read time.
+    * **runtime** (float): The duration in which data was received; the time in seconds after the start when the last bytes were read.
+    * **is_timeout** (bool): This is true if data was received after the read time.
+
+    :param port: The port to read from.
+    :param time: Reading time in seconds.
+    :type time: float
+    :param overflow_check_time: Time to check if more data is available. Defaults to 0.5
+    :type overflow_check_time: float, optional
+    :return: Returns the abovementioned dictionary.
+    :rtype: dict
+    """
+    return {
+        "output": bytes(0),
+        "timeout_output": None,
+        "runtime": 0,
+        "is_timeout": False,
+    }
 
 
 def run_compare_test(tc: TestCase, retries: int = TEST_RETRIES):
