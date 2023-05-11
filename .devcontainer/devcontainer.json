@@ -13,7 +13,8 @@
 				"pejmannikram.vscode-auto-scroll",
 				"albymor.increment-selection",
 				"eamodio.gitlens",
-				"ms-python.black-formatter"
+				"ms-python.black-formatter",
+				"donjayamanne.python-extension-pack"
 			]
 		}
 	},
