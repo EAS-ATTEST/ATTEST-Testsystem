@@ -1,6 +1,7 @@
 {
     "editor.formatOnSave": true,
     "python.formatting.provider": "none",
+    "autoDocstring.docstringFormat": "sphinx",
     "python.formatting.blackArgs": [
         "--preview"
     ],
