@@ -236,7 +236,7 @@ def run_test(tc: TestCase, test_env: fs.TestEnv):
         )
 
 
-def read_port(port, time: float, overflow_check_time: float = 0.5) -> dict:
+def read_port(port, read_time: float, overflow_check_time: float = 0.5) -> dict:
     """This function reads the port output for a given time.
     After the reading is completed, the port is monitored for possible further data.
     The result is marked as timeout if data is received after the read time.
@@ -249,18 +249,34 @@ def read_port(port, time: float, overflow_check_time: float = 0.5) -> dict:
     * **is_timeout** (bool): This is true if data was received after the read time.
 
     :param port: The port to read from.
-    :param time: Reading time in seconds.
-    :type time: float
+    :param read_time: Reading time in seconds.
+    :type read_time: float
     :param overflow_check_time: Time to check if more data is available. Defaults to 0.5
     :type overflow_check_time: float, optional
     :return: Returns the abovementioned dictionary.
     :rtype: dict
     """
+    start_time = time.time()
+    output = bytes(0)
+    timeout_output = bytes(0)
+    last_rec_time = 0
+
+    while True:
+        dt = time.time() - start_time
+        new_data = port.read(16)
+        last_rec_time = dt if len(new_data) > 0 else last_rec_time
+        if dt < read_time:
+            output += new_data
+        else:
+            timeout_output += new_data
+        if dt >= read_time + overflow_check_time:
+            break
+
     return {
-        "output": bytes(0),
-        "timeout_output": None,
-        "runtime": 0,
-        "is_timeout": False,
+        "output": output,
+        "timeout_output": None if len(timeout_output) == 0 else timeout_output,
+        "runtime": last_rec_time,
+        "is_timeout": len(timeout_output) > 0,
     }
 
 
