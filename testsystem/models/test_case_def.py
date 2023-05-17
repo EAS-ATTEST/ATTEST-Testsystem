@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import re
 import logging
+import time
 
 from testsystem.exceptions import ParsingError
 from testsystem.config import get_config
@@ -34,10 +35,12 @@ from testsystem.constants import (
     TEST_ID_LENGTH,
     TEST_BEGIN_MARKER,
     TEST_NEVER_IN_OUTPUT,
+    TC_DEF_CACHE_TIME_S,
 )
 
 
 _tc_defs = None
+_tc_defs_timestamp = 0
 
 
 def is_score_tc(test_case_def: TestCaseDef) -> bool:
@@ -75,8 +78,12 @@ def parse(line: str) -> TestCaseDef:
 
 
 def get_all(disable_cache: bool = False) -> list[TestCaseDef]:
-    global _tc_defs
-    if not disable_cache and _tc_defs is not None:
+    global _tc_defs, _tc_defs_timestamp
+    if (
+        not disable_cache
+        and _tc_defs is not None
+        and time.time() - _tc_defs_timestamp < TC_DEF_CACHE_TIME_S
+    ):
         return _tc_defs
 
     tcs = []
@@ -90,6 +97,7 @@ def get_all(disable_cache: bool = False) -> list[TestCaseDef]:
                 logging.warning(f"Test case parsing error in line {i + 1}. {ex}")
 
     _tc_defs = tcs
+    _tc_defs_timestamp = time.time()
     return _tc_defs
 
 

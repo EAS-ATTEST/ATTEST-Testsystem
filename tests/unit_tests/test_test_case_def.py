@@ -1,21 +1,21 @@
 #
 # Copyright 2023 EAS Group
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-# software and associated documentation files (the “Software”), to deal in the Software 
-# without restriction, including without limitation the rights to use, copy, modify, 
-# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-# permit persons to whom the Software is furnished to do so, subject to the following 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the “Software”), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to the following
 # conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies 
+# The above copyright notice and this permission notice shall be included in all copies
 # or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
@@ -24,6 +24,7 @@ import unittest.mock as mock
 
 from testsystem.models.test_case_def import TestCaseDef, get_all, get
 from testsystem.config import Config
+from testsystem.constants import TC_DEF_CACHE_TIME_S
 
 
 @mock.patch("testsystem.models.test_case_def.get_test_case_definitions")
@@ -91,3 +92,45 @@ def test_do_not_include_timing_tests_if_disabled(m_get_all, m_get_config):
     result = get(disable_cache=True)
     assert 1 == len(result)
     assert tcs[1] == result[0]
+
+
+@mock.patch("testsystem.models.test_case_def._tc_defs", None)
+@mock.patch("testsystem.models.test_case_def._tc_defs_timestamp", 0)
+@mock.patch("testsystem.models.test_case_def.time.time")
+@mock.patch("testsystem.models.test_case_def.get_test_case_definitions")
+def test_cache_timeout(m_get_tc_defs, m_time):
+    base_time = 10000
+    tc_def_raw = [
+        '#tc001: ex=01 timing=0 size=0 panic=0 ranking=0 runtime=1 description="Test1"',
+        '#tc002: ex=02 timing=0 size=0 panic=0 ranking=0 runtime=1 description="Test2"',
+    ]
+    m_get_tc_defs.return_value = tc_def_raw[0]
+    m_time.return_value = base_time
+    tc_defs1 = get_all()
+    m_time.return_value = base_time + TC_DEF_CACHE_TIME_S - 1
+    tc_defs2 = get_all()
+    m_get_tc_defs.return_value = "\n".join(tc_def_raw)
+    m_time.return_value = base_time + TC_DEF_CACHE_TIME_S
+    tc_defs3 = get_all()
+    assert len(tc_defs1) == 1
+    assert len(tc_defs2) == 1
+    assert len(tc_defs3) == 2
+
+
+@mock.patch("testsystem.models.test_case_def._tc_defs", None)
+@mock.patch("testsystem.models.test_case_def._tc_defs_timestamp", 0)
+@mock.patch("testsystem.models.test_case_def.time.time")
+@mock.patch("testsystem.models.test_case_def.get_test_case_definitions")
+def test_renew_cache_after_timeout(m_get_tc_defs, m_time):
+    base_time = 10000
+    tc_def_raw = [
+        '#tc001: ex=01 timing=0 size=0 panic=0 ranking=0 runtime=1 description="Test1"',
+        '#tc002: ex=02 timing=0 size=0 panic=0 ranking=0 runtime=1 description="Test2"',
+    ]
+    m_get_tc_defs.return_value = tc_def_raw[0]
+    m_time.return_value = base_time
+    tc_defs1 = get_all()
+    m_get_tc_defs.return_value = "\n".join(tc_def_raw)
+    tc_defs2 = get_all()
+    assert len(tc_defs1) == 1
+    assert len(tc_defs2) == 1
