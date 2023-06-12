@@ -3,6 +3,8 @@ RTOS Testsystem is a python-based test system for the Real-Time Operating System
 revised from scratch in the winter term of 2022 to improve its performance and
 functionality. The system utilizes dedicated external hardware for testing to guarantee precise and reliable results. It is firmly git-oriented to embed its functionality in the best possible way.
 
+For comprehensive documentation, please visit the [project website](https://eas-attest.github.io/ATTEST-Testsystem/index.html).
+
 ## Getting started
 
 The test system is easiest to use with the provided docker file. The current implementation uses MSP430 microcontroller boards as _target devices_ and 2205A PicoScopes as _measurement devices_. These devices form _test units_. A test unit is the dedicated hardware where test cases are executed.
@@ -80,7 +82,17 @@ Containers: Rebuild Container`` into the VSCode Command Palette.
 
 ## Cite
 
-**TODO**
+```
+@inproceedings{10.1145/3593663.3593678,
+  title = {{ATTEST: Automated and Thorough Testing of Embedded Software in Teaching}},
+  author = {Kissich, Meinhard and Weinbauer, Klaus and Baunach, Marcel},
+  year = {2023},
+  doi = {10.1145/3593663.3593678},
+  booktitle = {Proceedings of the 5th European Conference on Software Engineering Education},
+  pages = {199–203},
+  numpages = {5}
+}
+```
 
 ## License
 This project is published under the [MIT license](./LICENSE.txt).
