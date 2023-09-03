@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+authors:
+- given-names: "Meinhard"
+  family-names: "Kissich"
+  orcid: "https://orcid.org/0000-0003-4810-8312"
+- given-names: "Klaus"
+  family-names: "Weinbauer"
+  orcid: "https://orcid.org/0000-0002-3349-9157"
+- given-names: "Marcel"
+  family-names: "Baunach"
+  orcid: "https://orcid.org/0000-0002-3716-2682"
+title: "ATTEST: Automated and Thorough Testing of Embedded Software in Teaching"
+doi: "10.1145/3593663.3593678"
+preferred-citation:
+  type: conference-paper
+  authors:
+  - given-names: "Meinhard"
+    family-names: "Kissich"
+    orcid: "https://orcid.org/0000-0003-4810-8312"
+  - given-names: "Klaus"
+    family-names: "Weinbauer"
+    orcid: "https://orcid.org/0000-0002-3349-9157"
+  - given-names: "Marcel"
+    family-names: "Baunach"
+    orcid: "https://orcid.org/0000-0002-3716-2682"
+  doi: "10.1145/3593663.3593678"
+  title: "ATTEST: Automated and Thorough Testing of Embedded Software in Teaching"
+  year: 2023
