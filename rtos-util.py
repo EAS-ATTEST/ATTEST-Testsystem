@@ -322,6 +322,7 @@ def generate(args):
             try:
                 generate_group_tc(src, dest, args.starttag, args.exittag)
             except:
+                logging.warning(traceback.format_exc())
                 failed_groups.append(group_name)
 
         if len(failed_groups) > 0:
