@@ -9,7 +9,7 @@ on:
 
 env:
   PYTHONPATH: .:./tests/integration_tests
-  RTS_ROOT: .
+  ATTEST_ROOT: .
   GIT_PYTHON_REFRESH: quiet
 
 jobs:

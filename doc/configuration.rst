@@ -34,8 +34,7 @@ Environment Variables
 Configuration via environment variables can be used to customize the test system on
 startup. Environment variables are instrumental when the system runs as a docker image
 or as part of docker-compose. The naming convention for environment variables is
-UPPER_CASE with underscores and prefixed with ``RTS_`` \. The environment variable
-prefix RTS stands for **R**\ eal-Time Operating System **T**\ est **S**\ ystem.
+UPPER_CASE with underscores and prefixed with ``ATTEST_`` \.
 
 .. note::
 
@@ -48,7 +47,7 @@ environment variable:
 
 .. code-block::
 
-    RTS_RUN_HELLO_TESTSYSTEM=True
+    ATTEST_RUN_HELLO_TESTSYSTEM=True
 
 
 Config File

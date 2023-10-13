@@ -186,7 +186,7 @@ def enable_logging():
 
 
 def get_config_from_env() -> dict:
-    env_prefix = "RTS_"
+    env_prefix = "ATTEST_"
     pattern = re.compile(r"{prefix}\w+".format(prefix=env_prefix))
     conf = {}
     for k, v in os.environ.items():

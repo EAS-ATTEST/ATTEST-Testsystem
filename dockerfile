@@ -106,5 +106,5 @@ ENV PYTHONPATH=/testsystem:/testsystem/tests/integration_tests
 ENV OS=unix
 ENV INCLUDES=/opt/ti/msp430-gcc/include/
 ENV FLASHTOOL_MSP430=MSP430Flasher
-ENV RTS_ROOT=/testsystem
+ENV ATTEST_ROOT=/testsystem
 ENV LC_ALL=C
