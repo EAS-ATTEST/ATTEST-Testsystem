@@ -91,8 +91,6 @@ get_device_string(){
   do
     ACM_DEVICE_CNT=$(( $ACM_DEVICE_CNT + 1 ))
     LINKED_DEVICE_STR="${LINKED_DEVICE_STR}      - /dev/${DEVICE}:/dev/${DEVICE}"$'\n'
-    echo "===== TTY ====="
-    echo "${LINKED_DEVICE_STR}"
   done
 
   echo "[INFO] Found $ACM_DEVICE_CNT possible serial connections to MSP boards."
@@ -116,14 +114,12 @@ get_device_string(){
   for DEVICE in $SCOPE_DEVICES
   do
     LINKED_DEVICE_STR="${LINKED_DEVICE_STR}      - ${DEVICE}:${DEVICE}"$'\n'
-    echo "===== USB ====="
-    echo "${LINKED_DEVICE_STR}"
   done
 }
 
 get_device_string
 
-awk -v r="$LINKED_DEVICE_STR" '{gsub(/_DEVICES_/,r)}1' docker-compose-template.yml
+awk -v r="$LINKED_DEVICE_STR" '{gsub(/_DEVICES_/,r)}1' docker-compose-template.yml > $DOCKER_COMPOSE_FILE
 sed -i -e "s%_ARGS_%$ARGS%g" $DOCKER_COMPOSE_FILE
 sed -i -e "s%_ATTEST_IMG_%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g" $DOCKER_COMPOSE_FILE
 
