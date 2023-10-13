@@ -191,9 +191,18 @@ def get_config_from_env() -> dict:
     conf = {}
     for k, v in os.environ.items():
         if pattern.match(k):
+            prop = k.replace(env_prefix, "")
+            attr = getattr(Config, k)
+            typ = type(attr)
             if ";" in v:
-                v = v.split(";")
-            conf[k.replace(env_prefix, "")] = v
+                assert (
+                    typ is list
+                ), f"Config argument {prop} does not accept list values."
+                ltyp = type(attr[0])
+                val = [ltyp(e) for e in v.split(";")]
+            else:
+                val = typ(v)
+            conf[prop] = val
     return conf
 
 
