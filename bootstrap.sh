@@ -24,10 +24,10 @@
 
 #################### CONFIG ####################
 
-DOCKER_IMAGE_NAME="rts"
+DOCKER_IMAGE_NAME="attest"
 DOCKER_IMAGE_TAG="latest"
 DOCKER_FILE="dockerfile"
-DOCKER_CONTAINER_NAME="rts"
+DOCKER_CONTAINER_NAME="attest"
 # Path to the ssh directory for the test system user on the host
 SSH_PATH="/rtos/.ssh"
 # Log, DB and Config path
@@ -131,7 +131,7 @@ start_container() {
   echo "[INFO]    Command Parameters: $DOCKER_RUN_ARGS"
   docker run $ARGS $IMG $CMD $DOCKER_RUN_ARGS
   DOCKER_RET_CODE=$?
-  echo "[INFO] Container started. Use 'docker attach rts' to interact with the testsystem or 'docker attach --sig-proxy=false rts' to inspect the log output."
+  echo "[INFO] Container started. Use 'docker attach $DOCKER_CONTAINER_NAME' to interact with the testsystem or 'docker attach --sig-proxy=false $DOCKER_CONTAINER_NAME' to inspect the log output."
 }
 
 get_device_string
