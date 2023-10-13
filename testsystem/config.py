@@ -174,6 +174,10 @@ class Config:
     #:   scheduling. Tag values are case-insensitive.
     force_test_tags: list[str] = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"]
 
+    #: | :guilabel:`env` :guilabel:`file`
+    #: | System start delay in seconds. This might be used to wait for the database container.
+    start_delay: int = 0
+
     def get_group_commit_link(self, group_name: str, commit_hash: str) -> str:
         sub_path = f"{self.git_student_path}/{group_name}/-/tree/{commit_hash}"
         url = utils.url_builder(self.git_server, sub_path)
