@@ -28,10 +28,6 @@ DOCKER_IMAGE_NAME="attest"
 DOCKER_IMAGE_TAG="latest"
 DOCKER_FILE="dockerfile"
 DOCKER_CONTAINER_NAME="attest"
-# Path to the ssh directory for the test system user on the host
-SSH_PATH="/rtos/.ssh"
-# Log, DB and Config path
-SYS_PATH="/rtos"
 MSP_SERIAL_PORT_NAME="ttyACM"
 PICO_SCOPE_USB_NAME="PicoScope"
 
@@ -39,7 +35,7 @@ PICO_SCOPE_USB_NAME="PicoScope"
 
 DOCKER_BUILD_CONTEXT="."
 DOCKER_RUN_ARGS=""
-DOCKER_MODE="-it"
+DOCKER_MODE=""
 
 while test $# -gt 0
 do 
@@ -92,7 +88,7 @@ get_device_string(){
   for DEVICE in $ACM_DEVICES
   do
     ACM_DEVICE_CNT=$(( $ACM_DEVICE_CNT + 1 ))
-    LINKED_DEVICE_STR="$LINKED_DEVICE_STR --device=/dev/$DEVICE"
+    LINKED_DEVICE_STR="$LINKED_DEVICE_STR      - /dev/$DEVICE:/dev/$DEVICE\n"
   done
 
   echo "[INFO] Found $ACM_DEVICE_CNT possible serial connections to MSP boards."
@@ -102,7 +98,7 @@ get_device_string(){
     TOKEN=( $LINE )
     USB_BUS=${TOKEN[1]}
     USB_DEVICE=$(echo ${TOKEN[3]} | sed 's/://')
-    echo " --device=/dev/bus/usb/$USB_BUS/$USB_DEVICE"
+    echo "/dev/bus/usb/$USB_BUS/$USB_DEVICE"
   done )
 
   if [ ${#SCOPE_DEVICES[@]} -eq 0 ] && [ $$ACM_DEVICE_CNT -eq 0 ]
@@ -115,40 +111,28 @@ get_device_string(){
 
   for DEVICE in $SCOPE_DEVICES
   do
-    LINKED_DEVICE_STR="$LINKED_DEVICE_STR $DEVICE"
+    LINKED_DEVICE_STR="$LINKED_DEVICE_STR      - $DEVICE:$DEVICE\n"
   done
 }
 
+cp docker-compose-template.yml _docker-compose.yml
+sed -i -e "s%{DEVICES}%$LINKED_DEVICE_STR%g"
+sed -i -e "s%{ARGS}%$ARGS%g"
+sed -i -e "s%{ATTEST_IMG}%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g"
+
 DOCKER_RET_CODE=0
-start_container() {
-  ARGS="$LINKED_DEVICE_STR --rm $DOCKER_MODE --name $DOCKER_CONTAINER_NAME -v $SYS_PATH:/host -v $SSH_PATH:/root/.ssh"
-  IMG="$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
-  CMD="python3 main.py"
-  echo "[INFO] Start docker container."
-  echo "[INFO]    Arguments: $ARGS"
-  echo "[INFO]    Image: $IMG"
-  echo "[INFO]    Command: $CMD"
-  echo "[INFO]    Command Parameters: $DOCKER_RUN_ARGS"
-  docker run $ARGS $IMG $CMD $DOCKER_RUN_ARGS
+start_docker() {
+  echo "[INFO] Start docker compose."
+  docker compose up $DOCKER_MODE -f _docker-compose.yml
   DOCKER_RET_CODE=$?
-  echo "[INFO] Container started. Use 'docker attach $DOCKER_CONTAINER_NAME' to interact with the testsystem or 'docker attach --sig-proxy=false $DOCKER_CONTAINER_NAME' to inspect the log output."
+  echo "[INFO] Containers started. Use 'docker attach --sig-proxy=false $DOCKER_CONTAINER_NAME' to inspect the log output."
 }
 
 get_device_string
-start_container
+start_docker
 if [ $DOCKER_RET_CODE -eq 0 ]
 then
   exit 0
-elif [ $DOCKER_RET_CODE -eq 2 ]
-then
-  echo "[WARNING] Failed to detect PicoScopes. This may happen after connecting the PicoScopes."
-  echo "[INFO] Trying to get new device names and restarting."
-  get_device_string
-  start_container
-  if [ $DOCKER_RET_CODE -eq 0 ]
-  then
-    exit 0
-  fi
 fi
 
 echo "[ERROR] Starting the test system failed with exit code $DOCKER_RET_CODE."
