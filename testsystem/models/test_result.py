@@ -21,7 +21,7 @@
 
 from __future__ import annotations
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, BigInteger
 from sqlalchemy.types import Text
 from sqlalchemy.orm import relationship
 
@@ -65,7 +65,7 @@ class TestResult(db.Base):
     build_error: str | None = Column(Text, nullable=True)  # type: ignore
     flash_output: str | None = Column(Text, nullable=True)  # type: ignore
     flash_error: str | None = Column(Text, nullable=True)  # type: ignore
-    timestamp: int = Column(Integer, nullable=False)  # type: ignore
+    timestamp: int = Column(BigInteger, nullable=False)  # type: ignore
 
     test_set_result = relationship("TestSet", back_populates="test_results")
 
