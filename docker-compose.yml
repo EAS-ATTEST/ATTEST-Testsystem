@@ -12,7 +12,7 @@ services:
   attest:
     image: attest:latest
     depends_on: 
-      db:
+      - "db"
     environment:
       ATTEST_DB_TYPE: 'mysql'
       ATTEST_DB_USER: 'testsystem'
