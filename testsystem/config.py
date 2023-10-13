@@ -193,9 +193,9 @@ def get_config_from_env() -> dict:
         if pattern.match(k):
             prop = k.replace(env_prefix, "").lower()
             if not hasattr(Config, prop):
-                logging.info(
-                    f"Skip setting attribute '{prop}' from environment variables in"
-                    " config."
+                print(
+                    f"[INFO] Skip setting attribute '{prop}' from environment variables"
+                    " in config."
                 )
                 continue
             attr = getattr(Config, prop)
