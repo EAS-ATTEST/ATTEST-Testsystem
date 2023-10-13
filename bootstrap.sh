@@ -91,6 +91,7 @@ get_device_string(){
   do
     ACM_DEVICE_CNT=$(( $ACM_DEVICE_CNT + 1 ))
     LINKED_DEVICE_STR="$LINKED_DEVICE_STR      - /dev/$DEVICE:/dev/$DEVICE\n"
+    echo $LINKED_DEVICE_STR
   done
 
   echo "[INFO] Found $ACM_DEVICE_CNT possible serial connections to MSP boards."
@@ -114,6 +115,7 @@ get_device_string(){
   for DEVICE in $SCOPE_DEVICES
   do
     LINKED_DEVICE_STR="$LINKED_DEVICE_STR      - $DEVICE:$DEVICE\n"
+    echo $LINKED_DEVICE_STR
   done
 }
 
@@ -125,7 +127,7 @@ sed -i -e "s%{ATTEST_IMG}%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g" $DOCKER_COMPOS
 DOCKER_RET_CODE=0
 start_docker() {
   echo "[INFO] Start docker compose."
-  docker compose up $DOCKER_MODE -f $DOCKER_COMPOSE_FILE
+  docker compose $DOCKER_MODE -f $DOCKER_COMPOSE_FILE up
   DOCKER_RET_CODE=$?
   echo "[INFO] Containers started. Use 'docker attach --sig-proxy=false $DOCKER_CONTAINER_NAME' to inspect the log output."
 }
