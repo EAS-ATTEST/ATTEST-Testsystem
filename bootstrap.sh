@@ -90,7 +90,7 @@ get_device_string(){
   for DEVICE in $ACM_DEVICES
   do
     ACM_DEVICE_CNT=$(( $ACM_DEVICE_CNT + 1 ))
-    LINKED_DEVICE_STR=$"$LINKED_DEVICE_STR      - /dev/$DEVICE:/dev/$DEVICE\n"
+    LINKED_DEVICE_STR="${LINKED_DEVICE_STR}      - /dev/${DEVICE}:/dev/${DEVICE}"$'\n'
     echo $LINKED_DEVICE_STR
   done
 
