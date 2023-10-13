@@ -12,7 +12,7 @@ services:
     ports:
       - "3306:3306"
   attest:
-    image: {ATTEST_IMG}
+    image: _ATTEST_IMG_
     depends_on: 
       - "db"
     environment:
@@ -34,8 +34,8 @@ services:
         source: ~/.ssh
         target: /root/.ssh
     devices:
-{DEVICES}
-    command: python3 main.py {ARGS}
+_DEVICES_
+    command: python3 main.py _ARGS_
 volumes:
   data:
   host:
