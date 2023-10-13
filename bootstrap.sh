@@ -121,23 +121,24 @@ get_device_string(){
   done
 }
 
+get_device_string
+
 awk -v r="$LINKED_DEVICE_STR" '{gsub(/_DEVICES_/,r)}1' docker-compose-template.yml
-# sed -i -e "s%_ARGS_%$ARGS%g" $DOCKER_COMPOSE_FILE
-# sed -i -e "s%_ATTEST_IMG_%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g" $DOCKER_COMPOSE_FILE
-# 
-# DOCKER_RET_CODE=0
-# start_docker() {
-#   echo "[INFO] Start docker compose."
-#   docker compose -f $DOCKER_COMPOSE_FILE up $DOCKER_MODE 
-#   DOCKER_RET_CODE=$?
-#   echo "[INFO] Containers started. Use 'docker attach --sig-proxy=false $DOCKER_CONTAINER_NAME' to inspect the log output."
-# }
-# 
-# get_device_string
-# start_docker
-# if [ $DOCKER_RET_CODE -eq 0 ]
-# then
-#   exit 0
-# fi
-# 
-# echo "[ERROR] Starting the test system failed with exit code $DOCKER_RET_CODE."
+sed -i -e "s%_ARGS_%$ARGS%g" $DOCKER_COMPOSE_FILE
+sed -i -e "s%_ATTEST_IMG_%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g" $DOCKER_COMPOSE_FILE
+
+DOCKER_RET_CODE=0
+start_docker() {
+  echo "[INFO] Start docker compose."
+  docker compose -f $DOCKER_COMPOSE_FILE up $DOCKER_MODE 
+  DOCKER_RET_CODE=$?
+  echo "[INFO] Containers started. Use 'docker attach --sig-proxy=false $DOCKER_CONTAINER_NAME' to inspect the log output."
+}
+
+start_docker
+if [ $DOCKER_RET_CODE -eq 0 ]
+then
+  exit 0
+fi
+
+echo "[ERROR] Starting the test system failed with exit code $DOCKER_RET_CODE."
