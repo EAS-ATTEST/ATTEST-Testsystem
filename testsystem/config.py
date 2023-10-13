@@ -192,7 +192,7 @@ def get_config_from_env() -> dict:
     for k, v in os.environ.items():
         if pattern.match(k):
             prop = k.replace(env_prefix, "")
-            attr = getattr(Config, k)
+            attr = getattr(Config, prop)
             typ = type(attr)
             if ";" in v:
                 assert (
