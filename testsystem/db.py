@@ -56,7 +56,6 @@ def init_database():
                 ),
                 echo=False,
                 future=True,
-                connect_args={"timeout": DB_CONN_TIMEOUT_S},
             )
         else:
             raise NotImplementedError(
