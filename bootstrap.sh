@@ -91,6 +91,8 @@ get_device_string(){
   do
     ACM_DEVICE_CNT=$(( $ACM_DEVICE_CNT + 1 ))
     LINKED_DEVICE_STR="${LINKED_DEVICE_STR}      - /dev/${DEVICE}:/dev/${DEVICE}"$'\n'
+    echo "===== TTY ====="
+    echo "${LINKED_DEVICE_STR}"
   done
 
   echo "[INFO] Found $ACM_DEVICE_CNT possible serial connections to MSP boards."
@@ -114,6 +116,8 @@ get_device_string(){
   for DEVICE in $SCOPE_DEVICES
   do
     LINKED_DEVICE_STR="${LINKED_DEVICE_STR}      - ${DEVICE}:${DEVICE}"$'\n'
+    echo "===== USB ====="
+    echo "${LINKED_DEVICE_STR}"
   done
 }
 
