@@ -49,11 +49,12 @@ RUN wget -qO - https://labs.picotech.com/Release.gpg.key | apt-key add -
 RUN bash -c 'echo "deb https://labs.picotech.com/picoscope7/debian/ picoscope main" >/etc/apt/sources.list.d/picoscope7.list'
 RUN mkdir -p /etc/udev/rules.d/
 RUN apt-get update && apt-get download libps2000a
+RUN mv -f libps2000a*.deb libps2000a.deb
 RUN mkdir tmp
-RUN dpkg-deb -R libps2000a_2.1.105-5r3345_amd64.deb tmp
+RUN dpkg-deb -R libps2000a.deb tmp
 RUN sed -i '/udevadm control/d' tmp/DEBIAN/postinst
-RUN dpkg-deb -b tmp libps2000a_2.1.105-5r3345_amd64.deb
-RUN apt-get install -y ./libps2000a_2.1.105-5r3345_amd64.deb
+RUN dpkg-deb -b tmp libps2000a.deb
+RUN apt-get install -y ./libps2000a.deb
 ENV C_INCLUDE_PATH="${C_INCLUDE_PATH}:/opt/picoscope/include"
 ENV LIBRARY_PATH="${LIBRARY_PATH}:/opt/picoscope/lib"
 
