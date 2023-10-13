@@ -139,7 +139,7 @@ class Config:
 
     #: | :guilabel:`env` :guilabel:`file` :guilabel:`dyn`
     #: | Git server with all repos. You can use absolute paths to use the filesystem as
-    #    remote.
+    #:   remote.
     git_server: str = "ssh://git@iti-gitlab.tugraz.at"
 
     #: | :guilabel:`env` :guilabel:`file` :guilabel:`dyn`
