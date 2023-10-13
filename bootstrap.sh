@@ -37,6 +37,8 @@ DOCKER_BUILD_CONTEXT="."
 DOCKER_RUN_ARGS=""
 DOCKER_MODE=""
 
+DOCKER_COMPOSE_FILE="_docker-compose.yml"
+
 while test $# -gt 0
 do 
   case "$1" in
@@ -115,15 +117,15 @@ get_device_string(){
   done
 }
 
-cp docker-compose-template.yml _docker-compose.yml
-sed -i -e "s%{DEVICES}%$LINKED_DEVICE_STR%g"
-sed -i -e "s%{ARGS}%$ARGS%g"
-sed -i -e "s%{ATTEST_IMG}%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g"
+cp docker-compose-template.yml $DOCKER_COMPOSE_FILE
+sed -i -e "s%{DEVICES}%$LINKED_DEVICE_STR%g" $DOCKER_COMPOSE_FILE
+sed -i -e "s%{ARGS}%$ARGS%g" $DOCKER_COMPOSE_FILE
+sed -i -e "s%{ATTEST_IMG}%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g" $DOCKER_COMPOSE_FILE
 
 DOCKER_RET_CODE=0
 start_docker() {
   echo "[INFO] Start docker compose."
-  docker compose up $DOCKER_MODE -f _docker-compose.yml
+  docker compose up $DOCKER_MODE -f $DOCKER_COMPOSE_FILE
   DOCKER_RET_CODE=$?
   echo "[INFO] Containers started. Use 'docker attach --sig-proxy=false $DOCKER_CONTAINER_NAME' to inspect the log output."
 }
