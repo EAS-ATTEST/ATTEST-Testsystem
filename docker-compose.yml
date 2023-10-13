@@ -9,6 +9,8 @@ services:
       MYSQL_PASSWORD: 'Password1'
     volumes:
       - data:/var/lib/mysql
+    ports:
+      - "3306:3306"
   attest:
     image: attest:latest
     depends_on: 
