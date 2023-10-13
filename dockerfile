@@ -105,7 +105,7 @@ RUN git config --global user.name "ATTEST-Testsystem"
 
 ENV PYTHONPATH=/testsystem:/testsystem/tests/integration_tests
 ENV OS=unix
-ENV INCLUDES=/opt/ti/msp430-gcc/include/
+ENV INCLUDES=/root/ti/msp430-gcc/include/
 ENV FLASHTOOL_MSP430=MSP430Flasher
 ENV ATTEST_ROOT=/testsystem
 ENV LC_ALL=C
