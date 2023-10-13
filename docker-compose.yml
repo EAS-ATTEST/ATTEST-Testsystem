@@ -1,6 +1,6 @@
 version: '2'
 services:
-  mariadb:
+  db:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: 'secure'
@@ -11,12 +11,14 @@ services:
       - data:/var/lib/mysql
   attest:
     image: attest:latest
+    depends_on: 
+      db:
     environment:
       ATTEST_DB_TYPE: 'mysql'
       ATTEST_DB_USER: 'testsystem'
       ATTEST_DB_PASSWORD: 'Password1'
       ATTEST_DB_DATABASE: 'testsystem'
-      ATTEST_DB_SERVER: 'mariadb'
+      ATTEST_DB_SERVER: 'db'
       ATTEST_GIT_SERVER: 'ssh://git@iti-gitlab.tugraz.at'
       ATTEST_GIT_PUBLIC_PATH: 'eas/teaching/RTOS_SS99'
       ATTEST_GIT_STUDENT_PATH: 'eas/teaching/RTOS_SS99'
