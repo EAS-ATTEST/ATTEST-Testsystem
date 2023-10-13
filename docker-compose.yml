@@ -4,6 +4,7 @@ services:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: 'secure'
+      MYSQL_DATABASE: 'testsystem'
       MYSQL_USER: 'testsystem'
       MYSQL_PASSWORD: 'Password1'
     volumes:
