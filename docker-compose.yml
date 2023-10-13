@@ -13,6 +13,7 @@ services:
       - "3306:3306"
   attest:
     image: attest:latest
+    container_name: attest
     depends_on: 
       - "db"
     environment:
