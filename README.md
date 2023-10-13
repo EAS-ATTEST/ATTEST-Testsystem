@@ -43,13 +43,13 @@ If you already have an MSP430 or a PicoScope connected to your host, you can che
 The test system runs in a docker container. We suggest you first build the docker image because this may take a while.
 
 ```
-docker build -t rts:latest .
+docker build -t attest:latest .
 ```
 
 When you have the docker image ready, you can inspect the available commands of the test system.
 
 ```
-docker run --rm -t rts:latest python3 main.py --help
+docker run --rm -t attest:latest python3 main.py --help
 ```
 
 ## Documentation
@@ -59,7 +59,7 @@ Or you build the documentation locally by running the following command after yo
 
 ```
 docker run --rm -t \
-    -v "$(pwd)":/host rts:latest \
+    -v "$(pwd)":/host attest:latest \
     bash -c "make html && cp -R _build/html /host/documentation"
 ```
 

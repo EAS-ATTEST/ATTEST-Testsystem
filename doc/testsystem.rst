@@ -115,7 +115,7 @@ because it needs to compile the libmsp library from scratch.
 
 .. code-block::
 
-    docker build -t rts:latest .
+    docker build -t attest:latest .
 
 To check if the setup works, run the *hello testsystem* program. This is the hello world
 equivalent of the test system. It should greet you with basic information about the
@@ -125,7 +125,7 @@ They will show up in the log.
 
 .. code-block::
 
-    docker run --rm -t -v "$(pwd)":/host rts:latest python3 main.py --hello-testsystem
+    docker run --rm -t -v "$(pwd)":/host attest:latest python3 main.py --hello-testsystem
 
 .. note::
 
@@ -140,7 +140,7 @@ those files. So make sure this directory is mounted somewhere in the host system
 
 .. code-block::
 
-    docker run --rm -v "$(pwd)":/host -t rts:latest python3 main.py
+    docker run --rm -v "$(pwd)":/host -t attest:latest python3 main.py
 
 
 Other Docker Commands
@@ -150,33 +150,33 @@ Display available commands from the test system:
 
 .. code-block::
 
-    docker run --rm -t rts:latest python3 main.py --help
+    docker run --rm -t attest:latest python3 main.py --help
 
 Get a list of all MSPs and PicoScopes that have ever been connected to the test system:
 
 .. code-block::
 
-    docker run --rm -v "$(pwd)":/host -t rts:latest python3 main.py --list-devices
+    docker run --rm -v "$(pwd)":/host -t attest:latest python3 main.py --list-devices
 
 Set the display name for a device. This name is for example shown in the system report: 
 
 .. code-block::
 
-    docker run --rm -v "$(pwd)":/host -t rts:latest python3 main.py --set-name <SN> <NAME>
+    docker run --rm -v "$(pwd)":/host -t attest:latest python3 main.py --set-name <SN> <NAME>
 
 Build documentation:
 
 .. code-block::
 
     docker run --rm -t \ 
-        -v "$(pwd)":/host rts:latest \
+        -v "$(pwd)":/host attest:latest \
         bash -c "make html && cp -R _build/html /host/documentation"
 
 Run unit tests:
 
 .. code-block::
 
-    docker run --rm -t rts:latest pytest tests/unit_tests
+    docker run --rm -t attest:latest pytest tests/unit_tests
 
 To successfully run integration tests, make sure to use the correct device paths for MPS
 and PicoScope. The following command runs integration tests with one test unit:
@@ -187,7 +187,7 @@ and PicoScope. The following command runs integration tests with one test unit:
         --device=/dev/ttyACM0 \
         --device=/dev/ttyACM1 \
         --device=/dev/bus/usb/001/003 \ 
-        rts:latest pytest tests/integration_tests
+        attest:latest pytest tests/integration_tests
 
 Hardware
 ========
