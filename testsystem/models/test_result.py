@@ -22,6 +22,7 @@
 from __future__ import annotations
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float
+from sqlalchemy.types import Text
 from sqlalchemy.orm import relationship
 
 import testsystem.db as db
@@ -59,11 +60,11 @@ class TestResult(db.Base):
     result: float | None = Column(Float, nullable=True)  # type: ignore
     test_case_id: int = Column(Integer, nullable=False)  # type: ignore
     successful: bool = Column(Boolean, nullable=False)  # type: ignore
-    output: str = Column(String(4096), nullable=False, default="")  # type: ignore
-    build_output: str | None = Column(String(4096), nullable=True)  # type: ignore
-    build_error: str | None = Column(String(4096), nullable=True)  # type: ignore
-    flash_output: str | None = Column(String(4096), nullable=True)  # type: ignore
-    flash_error: str | None = Column(String(4096), nullable=True)  # type: ignore
+    output: str = Column(Text, nullable=False, default="")  # type: ignore
+    build_output: str | None = Column(Text, nullable=True)  # type: ignore
+    build_error: str | None = Column(Text, nullable=True)  # type: ignore
+    flash_output: str | None = Column(Text, nullable=True)  # type: ignore
+    flash_error: str | None = Column(Text, nullable=True)  # type: ignore
     timestamp: int = Column(Integer, nullable=False)  # type: ignore
 
     test_set_result = relationship("TestSet", back_populates="test_results")
