@@ -200,10 +200,10 @@ def get_config_from_env() -> dict:
                 continue
             attr = getattr(Config, prop)
             typ = type(attr)
-            if ";" in v:
-                if not type is list:
+            if ";" in v or typ is list:
+                if typ is not list:
                     raise TypeError(
-                        f"Config argument {prop} does not accept list values."
+                        f"Config argument '{prop}' does not accept list values."
                     )
                 ltyp = type(attr[0])
                 val = [ltyp(e) for e in v.split(";")]
