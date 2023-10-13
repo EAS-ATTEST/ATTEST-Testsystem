@@ -120,7 +120,7 @@ get_device_string(){
 get_device_string
 
 awk -v r="$LINKED_DEVICE_STR" '{gsub(/_DEVICES_/,r)}1' docker-compose-template.yml > $DOCKER_COMPOSE_FILE
-sed -i -e "s%_ARGS_%$ARGS%g" $DOCKER_COMPOSE_FILE
+sed -i -e "s%_ARGS_%$DOCKER_RUN_ARGS%g" $DOCKER_COMPOSE_FILE
 sed -i -e "s%_ATTEST_IMG_%$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG%g" $DOCKER_COMPOSE_FILE
 
 DOCKER_RET_CODE=0
