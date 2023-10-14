@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testsystem &mdash; ATTEST Testsystem  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Configuration" href="configuration.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ATTEST Testsystem
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testsystem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#repository-structure">Repository Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-structure">System Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-docker-commands">Other Docker Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware">Hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#msp430">MSP430</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#picoscope">PicoScope</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#bootstrap-script">Bootstrap Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#group-testing">Group Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-scheduling">Task Scheduling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#priorities">Priorities</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parallelization">Parallelization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contribution-development">Contribution &amp; Development</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testunit_discovery.html">Test Unit discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing the test system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ATTEST Testsystem</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Testsystem</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="testsystem">
+<h1>Testsystem<a class="headerlink" href="#testsystem" title="Permalink to this heading"></a></h1>
+<p>ATTEST is a python-based test system for the Real-Time Operating Systems
+course at the Institute of Technical Informatics. It was revised from scratch in the
+winter term of 2022 to improve its performance and functionality. The system utilizes
+special external hardware for testing to guarantee precise and reliable results. It is
+firmly git-oriented to embed its functionality in the best possible way.</p>
+<section id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this heading"></a></h2>
+<p>This section briefly summarizes the directory structure of the test system. There are
+two directory trees, the source tree and the working tree. The <a class="reference internal" href="#repository-structure"><span class="std std-ref">Repository Structure</span></a> is the source directory tree and contains the code, documentation, software,
+and tools required to run the test system. The <a class="reference internal" href="#system-structure"><span class="std std-ref">System Structure</span></a> is the working
+directory tree used by the running test system.</p>
+<section id="repository-structure">
+<h3>Repository Structure<a class="headerlink" href="#repository-structure" title="Permalink to this heading"></a></h3>
+<p>The following section provides an overview of the repository structure with a short
+description of the purpose.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/                                 : Repository root
+├── .devcontainer
+|   └── devcontainer.json         : Devcontainer configuration
+├── .vscode                       : Tasks and settings for VS Code as IDE
+├── doc                           : Documentation source files
+├── software                      : Libraries and tools required to run the test system
+├── testcases                     : Source for test cases used by the test system
+├── tests                         : Test cases used to test the test system
+├── testsystem                    : Test system python package
+├── .coveragerc                   : Configuration for coverage report
+├── bootstrap.sh                  : Test system bootstrap script
+├── conf.py                       : Sphinx configuration (Documentation generation)
+├── index.rst                     : Documentation root
+├── main.py                       : Test system main; Starts/runs the test system
+└── Makefile                      : Sphinx make to build documentation
+</pre></div>
+</div>
+</section>
+<section id="system-structure">
+<h3>System Structure<a class="headerlink" href="#system-structure" title="Permalink to this heading"></a></h3>
+<p>This section covers the system directory structure in greater detail. The system
+structure is different than the repository structure and is used by the running test
+system. The following tree depicts the used directories inside the docker container.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/                                 : Container root directory
+├── git                           : Directory for local git clones
+|   ├── RTOS_Public_SSXX          : Clone of public repository
+|   ├── groups                    : Directory for local group clones
+|   |   ├── RTOS_SSXX_Group01     :
+|   |   ├── RTOS_SSXX_Group02     :
+|   |   └── ...                   :
+|   └── sys                       : Clone of system repository (Report repo)
+├── host                          : Shared directory with host for config, db, logs
+|   ├── config.json               : Test system configuration
+|   ├── testsystem.db             : Test system database
+|   └── testsystem.log            : Test system logs
+├── root/.ssh                     : Shared directory with host for git ssh key
+├── testcases                     : Directory of test case definitions
+|   ├── output                    : Directory for test case outputs
+|   |   └── &lt;test_id&gt;.txt         : Output as txt file for specific testcase
+|   ├── testbenches               : Source directory of test cases
+|   |   └── &lt;test_id&gt;             : Source directory for specific test case
+|   |       ├── Makefile          :
+|   |       └── ...               :
+|   └── testcases.txt             : List of test case configurations
+├── testenv                       : Working directory for the testsystem
+|   └── &lt;commit_hash&gt;             : Test environment for a specific group on a
+|       |                         :   specific commit for a specific test case
+|       ├── RTOS_Public_SSXX      : Copy of the public repository
+|       |   └── apps/testbenches  :
+|       |       └── &lt;test_id&gt;     : Copy of test case source directory
+|       └── RTOS_SSXX_GroupYY     : Shadow copy of group repository
+└── testsystem                    : Contains the test system
+    ├── doc                       : Documentation source
+    ├── tests                     : Unit and integration tests
+    ├── testsystem                : Test system python package
+    ├── conf.py                   : Sphinx configuration
+    ├── index.rst                 : Documentation root
+    ├── main.py                   : Entry point for the test system
+    └── Makefile                  : Sphinx make to build documentation
+</pre></div>
+</div>
+<p>Building the docker container creates the directory <em>testcases</em> and <em>testsystem</em>. The
+sources for these directories are the directories of the same name in the test system
+repository. Once started, the test system will create the <em>git</em> and <em>testenv</em>
+directories as needed.</p>
+</section>
+</section>
+<section id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this heading"></a></h2>
+<p>The RTOS test system is supposed to run as a docker container. An essential aspect to
+consider is that the test system needs access to the USB and COM ports of the host
+system to communicate with the MSP boards and the PicoScopes. Docker provides the
+<code class="docutils literal notranslate"><span class="pre">--device</span></code> option to map host devices to a container. The disadvantage is that the
+device option requires a list of specific ports on startup and does not support a
+wildcard or mapping the whole /dev directory. This restriction makes it impossible for
+the test system to discover new hardware on its own. The test system can only use the
+devices provided by the docker run command and therefore needs a restart every time a
+new device is added.</p>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Permalink to this heading"></a></h3>
+<p>The following command builds the test system image. Building the image can take a while
+because it needs to compile the libmsp library from scratch.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>To check if the setup works, run the <em>hello testsystem</em> program. This is the hello world
+equivalent of the test system. It should greet you with basic information about the
+installation and a confirmation message that everything is working fine. The <em>hello
+testsystem</em> program is also handy for checking if the MSPs and PicoScopes are detected.
+They will show up in the log.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">t</span> <span class="o">-</span><span class="n">v</span> <span class="s2">&quot;$(pwd)&quot;</span><span class="p">:</span><span class="o">/</span><span class="n">host</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="n">python3</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">hello</span><span class="o">-</span><span class="n">testsystem</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To check if the test system detects the hardware, add the respective ports with the
+<code class="docutils literal notranslate"><span class="pre">--device</span></code> option (e.g.: <code class="docutils literal notranslate"><span class="pre">--device=/dev/ttyACM0</span> <span class="pre">--device=/dev/ttyACM1</span>
+<span class="pre">--device=/dev/bus/usb/001/003</span></code>)</p>
+</div>
+<p>To start the test system, run the <em>main.py</em> without an additional parameter. Docker
+needs a volume on the host system to permanently store the config, database, and logs.
+The default configuration of the test system is that it uses the <em>/host</em> directory for
+those files. So make sure this directory is mounted somewhere in the host system.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">v</span> <span class="s2">&quot;$(pwd)&quot;</span><span class="p">:</span><span class="o">/</span><span class="n">host</span> <span class="o">-</span><span class="n">t</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="n">python3</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="other-docker-commands">
+<h3>Other Docker Commands<a class="headerlink" href="#other-docker-commands" title="Permalink to this heading"></a></h3>
+<p>Display available commands from the test system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">t</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="n">python3</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>Get a list of all MSPs and PicoScopes that have ever been connected to the test system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">v</span> <span class="s2">&quot;$(pwd)&quot;</span><span class="p">:</span><span class="o">/</span><span class="n">host</span> <span class="o">-</span><span class="n">t</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="n">python3</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">devices</span>
+</pre></div>
+</div>
+<p>Set the display name for a device. This name is for example shown in the system report:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">v</span> <span class="s2">&quot;$(pwd)&quot;</span><span class="p">:</span><span class="o">/</span><span class="n">host</span> <span class="o">-</span><span class="n">t</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="n">python3</span> <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">name</span> <span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">NAME</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Build documentation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">t</span> \
+    <span class="o">-</span><span class="n">v</span> <span class="s2">&quot;$(pwd)&quot;</span><span class="p">:</span><span class="o">/</span><span class="n">host</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> \
+    <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;make html &amp;&amp; cp -R _build/html /host/documentation&quot;</span>
+</pre></div>
+</div>
+<p>Run unit tests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">t</span> <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="n">pytest</span> <span class="n">tests</span><span class="o">/</span><span class="n">unit_tests</span>
+</pre></div>
+</div>
+<p>To successfully run integration tests, make sure to use the correct device paths for MPS
+and PicoScope. The following command runs integration tests with one test unit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">t</span> \
+    <span class="o">--</span><span class="n">device</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">ttyACM0</span> \
+    <span class="o">--</span><span class="n">device</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">ttyACM1</span> \
+    <span class="o">--</span><span class="n">device</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="mi">001</span><span class="o">/</span><span class="mi">003</span> \
+    <span class="n">attest</span><span class="p">:</span><span class="n">latest</span> <span class="n">pytest</span> <span class="n">tests</span><span class="o">/</span><span class="n">integration_tests</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hardware">
+<h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this heading"></a></h2>
+<p>The test system uses external hardware to run groups’ test cases. It utilizes two types
+of hardware, microcontroller boards, and oscilloscopes, which are connected pairwise to
+form test units. A test unit consists of a microcontroller board running the real-time
+operating system test case and an oscilloscope where at least one channel is connected
+to a board pin to measure output signals. Which pin-to-channel connections are required
+depends on the test case implementation. If this changes due to additional test cases,
+update the <a class="reference internal" href="reference.html#testsystem.config.Config.tu_connections" title="testsystem.config.Config.tu_connections"><code class="xref py py-attr docutils literal notranslate"><span class="pre">testsystem.config.Config.tu_connections</span></code></a> property in the
+configuration to tell the test system which connections are required for a valid test
+unit.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The current implementation requires a connection from MSP port 6 pin 0 to digital
+channel 7 on the PicoScope. <strong>P6.0-D7</strong></p>
+</div>
+<section id="msp430">
+<h3>MSP430<a class="headerlink" href="#msp430" title="Permalink to this heading"></a></h3>
+<p>The test system uses MSP-EXP430F5529LP microcontroller boards to run the test cases for
+the groups. Test cases are built by make and the msp-gcc compiler. Flashing test cases
+onto the microcontrollers is handled by the MSP430Flasher. The source for both tools
+lies in the software directory of the repository. They are installed when building the
+docker container. The test system runs these as external tasks and processes their
+output. It uses the <a class="reference internal" href="reference.html#testsystem.utils.run_external_task" title="testsystem.utils.run_external_task"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_external_task()</span></code></a> as a unified
+interface to external tools.</p>
+<p>MSP boards connect to COM ports. The name of these ports starts with ttyACM followed by
+a consecutive number. Each MSP exposes two COM ports: a UART port, and a debug port.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>New COM ports reuse free ttyACM devices. Reused COM ports allow the test system to
+detect new MSPs without a restart when the device was already mapped into the
+container.</p>
+</div>
+</section>
+<section id="picoscope">
+<h3>PicoScope<a class="headerlink" href="#picoscope" title="Permalink to this heading"></a></h3>
+<p>The test system uses PicoScope 2205A MSP 2-channel USB oscilloscopes. The PicoScopes are
+primarily used to measure timing on real-time operating system tasks. Pico Technology,
+the manufacturer of the PicoScope, provides an extensive C API to their oscilloscopes
+with sufficient documentation and numerous examples. In addition to the C API, they
+develop the <a class="reference external" href="https://github.com/picotech/picosdk-python-wrappers">PicoSDK</a>, a python
+wrapper to the C API functions.</p>
+<p>PicoScopes connect as USB devices. USB devices usually do not reuse unused device
+numbers. They can be discovered by using the <code class="docutils literal notranslate"><span class="pre">lsusb</span></code> command. The output of this
+command looks similar to this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="n">Bus</span> <span class="mi">001</span> <span class="n">Device</span> <span class="mi">003</span><span class="p">:</span> <span class="n">ID</span> <span class="mi">0</span><span class="n">ce9</span><span class="p">:</span><span class="mi">1016</span> <span class="n">Pico</span> <span class="n">Technology</span> <span class="n">PicoScope</span> <span class="mi">2000</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>PicoScopes have an annoying behavior when newly connected to a PC. On the first
+connection, it disconnects and reconnects as a new USB device. This makes it
+impossible to use the PicoScope after it is initially connected to a PC because it
+uses a new port that was unavailable when the docker container started. This happens
+only on the first connection. Restarting the host PC does not retrigger this
+behavior as long as the scope stays connected.</p>
+</div>
+</section>
+</section>
+<section id="bootstrap-script">
+<h2>Bootstrap Script<a class="headerlink" href="#bootstrap-script" title="Permalink to this heading"></a></h2>
+<p>The bootstrap script automates the build and start of the production test system with a MySQL database.
+The test system needs access to the PicoScopes and MSP430 boards connected via USB to the host.
+The script builds the test system container if it does not exist,
+discovers device connections present at the host,
+and starts the test system container and a persistent database.
+It generates a docker-compose file from the <code class="docutils literal notranslate"><span class="pre">docker-compose-template.yml</span></code>,
+which is used to start the containers with the correct configuration.
+The script runs the docker-compose in detached mode.
+That means the test system no longer uses the terminal after the build process and runs in the background.
+To reattach the terminal to the test system, use the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">attach</span> <span class="o">--</span><span class="n">sig</span><span class="o">-</span><span class="n">proxy</span><span class="o">=</span><span class="n">false</span> <span class="n">attest</span>
+</pre></div>
+</div>
+<p>The previous command only shows the test system output. By pressing <code class="docutils literal notranslate"><span class="pre">CTRL</span></code> + <code class="docutils literal notranslate"><span class="pre">C</span></code>, the
+terminal gets detached, but the test system continues in the background. To terminate
+the test system, either set <code class="docutils literal notranslate"><span class="pre">--sig-proxy</span></code> to true when attaching or set the
+<a class="reference internal" href="reference.html#testsystem.config.Config.stop" title="testsystem.config.Config.stop"><code class="xref py py-attr docutils literal notranslate"><span class="pre">stop</span></code></a> property in the configuration.</p>
+<p>You can add an arbitrary number of arguments when calling the bootstrap script.
+These arguments are forwarded to the test system container (exceptions in the following table).
+For example, you can call the test systems help menu directly with the bootstrap script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">sh</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>The arguments in this table are an exception to those passed to docker.
+They will be handled directly by the bootstrap script.
+You can combine them with an arbitrary number of other arguments you want to pass to the test system.
+The order does not matter; the bootstrap script handles arguments from the table,
+and all others are passed down to docker.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Arguments</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--dockerfile <em>filepath</em></p></td>
+<td><p>Use a specific dockerfile with the bootstrap script. E.g. a custom environment for your test system.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="group-testing">
+<h2>Group Testing<a class="headerlink" href="#group-testing" title="Permalink to this heading"></a></h2>
+<p>Groups will be tested when they push new commits to the primary branch
+(<a class="reference internal" href="reference.html#testsystem.config.Config.git_primary_branch_name" title="testsystem.config.Config.git_primary_branch_name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">git_primary_branch_name</span></code></a>). The scheduler
+periodically checks the student repositories for new commits and schedules test case
+tasks if a new commit is present. The interval in which a student repository is checked
+for new commits is not constant and depends on how busy the test system is. When a new
+commit is detected and scheduled for testing, the test system won’t recheck the group
+until the test run is completed. This is to stay caught up on work and deliver
+up-to-date results when the test system has high utilization. The <em>force test tags</em>
+feature allows the specification of tags that will be tested anyways. This is to ensure
+test results for commits that definitely require a test report. Submission commits, for
+example. These tags can be configured with the
+<a class="reference internal" href="reference.html#testsystem.config.Config.force_test_tags" title="testsystem.config.Config.force_test_tags"><code class="xref py py-attr docutils literal notranslate"><span class="pre">force_test_tags</span></code></a> property.</p>
+</section>
+<section id="task-scheduling">
+<h2>Task Scheduling<a class="headerlink" href="#task-scheduling" title="Permalink to this heading"></a></h2>
+<p>The scheduling thread handles task scheduling on the test system. This thread runs
+asynchronously to the worker threads, which execute the tasks assigned by the scheduler.
+Each task has a priority (lower values have higher priority) and, optionally, a fixed
+test unit it should run on. Each test case for a group and a commit is scheduled as an
+individual task. Test case tasks for a test run are not set to a specific test unit and
+can run on any test unit. This, in combination with group priorities, results in all
+test units being used for a single group until the test run is finished. Then the next
+group will use all test units for its test run.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a test case task fails because of an external error (e.g., MSP430Flasher not
+responding), the task is scheduled again with a priority of 9. The default priority
+range for test case tasks is 10 to 20.</p>
+</div>
+<p>The scheduler periodically checks the group repositories for new commits and, if
+available, schedules test case tasks based on the current exercise configuration
+<a class="reference internal" href="reference.html#testsystem.config.Config.exercise_nr" title="testsystem.config.Config.exercise_nr"><code class="xref py py-attr docutils literal notranslate"><span class="pre">exercise_nr</span></code></a> for execution. Only the most recent
+commit will be scheduled, and new commits will be considered once the test run is
+finished. The following timing example should clarify which commits will be scheduled
+and tested by the test system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Group                           Test system
+├─ Commit C1                    |
+├─ Commit C2                    |
+|                               ├─ Test system is started
+|                               ├─ Start testing C2
+├─ Commit C3                    ├─ Testing C2 ...
+├─ Commit C4                    ├─ Testing C2 ...
+├─ C2 Report available          ├─ Finished testing C2
+|                               ├─ Start testing C4
+</pre></div>
+</div>
+<section id="priorities">
+<h3>Priorities<a class="headerlink" href="#priorities" title="Permalink to this heading"></a></h3>
+<p>The following table lists the used task priorities from high priority to low priority.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Used Task Priorities</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Priority Value</p></th>
+<th class="head"><p>Description &amp; Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Priority for legacy tasks. All tasks in the queue at the time of a priority
+reset get this priority assigned no matter what their previous value was.</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>If a task fails because a test unit stopped responding and the test case timed out, the task will be rescheduled with this priority.</p></td>
+</tr>
+<tr class="row-even"><td><p>10 - 20</p></td>
+<td><p>Priority range used for group test case tasks. The priority is computed based on the time the group spent waiting in the queue.</p></td>
+</tr>
+<tr class="row-odd"><td><p>25</p></td>
+<td><p>Used for tagged commit tests. Commits tagged with a force test tag (specified in configuration) will used this priority.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
+<p>The test system has two different logging providers configured: terminal logging and
+file logging. The system prints all logs with priority <em>INFO</em> or higher to the terminal to
+give a live view of the test systems actions. Additionally to the terminal, the logs are
+written to a log file. File logging is customizable by setting
+<a class="reference internal" href="reference.html#testsystem.config.Config.log_file" title="testsystem.config.Config.log_file"><code class="xref py py-attr docutils literal notranslate"><span class="pre">log_file</span></code></a> and
+<a class="reference internal" href="reference.html#testsystem.config.Config.log_level" title="testsystem.config.Config.log_level"><code class="xref py py-attr docutils literal notranslate"><span class="pre">log_level</span></code></a>, which sets the destination and level,
+respectively.</p>
+</section>
+<section id="parallelization">
+<h2>Parallelization<a class="headerlink" href="#parallelization" title="Permalink to this heading"></a></h2>
+<p>Using multiple test units allows parallelizing test case tasks and, therefore, enables
+horizontal scaling of the test system. The following table and figure show how the
+number of test units affects the execution. The tests were run with a single group, a
+working final OS submission, and all 57 test cases.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p># TUs</p></th>
+<th class="head"><p>Exec. time (s)</p></th>
+<th class="head"><p>Speedup</p></th>
+<th class="head"><p>Speedup (previous)</p></th>
+<th class="head"><p>Parallelization portion (Amdahl’s law)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>788</p></td>
+<td><p>-</p></td>
+<td><p>-</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>411</p></td>
+<td><p>1.92</p></td>
+<td><p>1.92</p></td>
+<td><p>0.958</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>222</p></td>
+<td><p>3.55</p></td>
+<td><p>1.85</p></td>
+<td><p>0.958</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>131</p></td>
+<td><p>6.02</p></td>
+<td><p>1.69</p></td>
+<td><p>0.953</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following figure depicts the possible speedup and execution time based on the number
+of test units and a parallelization factor of 0.956 (average from measurements). The
+blue curve shows the calculated speedup according to Amdahl’s law, and the green curve
+depicts the expected execution time for a test run with all 57 test cases. The number of
+test cases also marks the upper bound for the number of test units because a test case
+is the smallest possible undividable unit of work in this context.</p>
+<img alt="../_images/parallelization-capabilities.jpeg" src="../_images/parallelization-capabilities.jpeg" />
+</section>
+<section id="contribution-development">
+<h2>Contribution &amp; Development<a class="headerlink" href="#contribution-development" title="Permalink to this heading"></a></h2>
+<p>The recommended way for developing the test system is by using VSCode and the
+development container feature. The project contains a dev container configuration for
+VSCode to make contributions as easy as possible. To start the dev container, press
+<code class="docutils literal notranslate"><span class="pre">CTRL</span></code> + <code class="docutils literal notranslate"><span class="pre">SHIFT</span></code> + <code class="docutils literal notranslate"><span class="pre">P</span></code>, type <code class="docutils literal notranslate"><span class="pre">Dev</span> <span class="pre">Containers:</span> <span class="pre">Open</span> <span class="pre">Folder</span> <span class="pre">in</span> <span class="pre">Container...</span></code> and
+select the cloned test system directory. The dev container configures the environment,
+includes all the required packages, and contains some useful VS Code extensions for
+development. If test units are available, add the respective devices to the <code class="docutils literal notranslate"><span class="pre">runArgs</span></code>
+section in the <code class="docutils literal notranslate"><span class="pre">.devcontainer</span></code> file and restart the container by typing <code class="docutils literal notranslate"><span class="pre">Dev</span>
+<span class="pre">Containers:</span> <span class="pre">Rebuild</span> <span class="pre">Container</span></code> into the VSCode Command Palette.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, EAS Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

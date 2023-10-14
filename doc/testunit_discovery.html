@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Unit discovery &mdash; ATTEST Testsystem  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Testing the test system" href="testing.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ATTEST Testsystem
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testsystem.html">Testsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Test Unit discovery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discover-msp430-boards">Discover MSP430 boards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discover-picoscopes">Discover PicoScopes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discover-connections">Discover Connections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#identifier-program">Identifier Program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pico-reader">Pico Reader</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing the test system</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ATTEST Testsystem</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Test Unit discovery</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="test-unit-discovery">
+<h1>Test Unit discovery<a class="headerlink" href="#test-unit-discovery" title="Permalink to this heading"></a></h1>
+<p>The discovery process is an integral part of the test system.
+It is executed during startup and looks for available MSP430 boards and PicoScopes to further combine them into Test Units.
+Once the test system discovers some devices, it tries to detect which PicoScope channel is connected to which MSP430 pin.
+Finding connections is not a trivial task because many possible configurations exist.
+For example, a PicoScope can connect to different MSP430 boards, and an MSP can connect to different PicoScopes,
+already giving us an M-to-N relation for possible connections.
+Further, it is also possible that a single MSP430 pin is connected to multiple channels or even multiple PicoScopes.
+The test system needs to be aware of the physical structure of the testing hardware so it can correctly combine devices to test units.
+The following figure schematically depicts the process flow and shows which components are involved in the individual steps.
+The following sections then provide an in-depth description of these steps.</p>
+<img alt="../_images/discovery-process.svg" src="../_images/discovery-process.svg" /><section id="discover-msp430-boards">
+<h2>Discover MSP430 boards<a class="headerlink" href="#discover-msp430-boards" title="Permalink to this heading"></a></h2>
+<p>Discovering MSP430 boards is done by checking for available COM ports.
+The test system, therefore, uses the <code class="docutils literal notranslate"><span class="pre">pyserial</span></code> python library, which has a convenient function to list connected devices.
+The returned objects give detailed information about the device, like serial number, interface, manufacturer, and product details.
+The system then checks if the interface belongs to an MSP430 board.
+Each MSP has two COM ports.
+One debug interface and one UART interface.
+Both ports must be available for an MSP to be used by the test system.
+You will get a warning message in the logs if only one port is connected.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure that all required ports are actually mapped into the docker container.
+Otherwise, the test system won’t be able to use the boards.
+These ports are usually listed as /dev/ttyACM devices, followed by a consecutive number.</p>
+</div>
+</section>
+<section id="discover-picoscopes">
+<h2>Discover PicoScopes<a class="headerlink" href="#discover-picoscopes" title="Permalink to this heading"></a></h2>
+<p>Discovering PicoScopes is similar to the discovery process of MSP430 boards, but in this case,
+the test system uses the <code class="docutils literal notranslate"><span class="pre">picosdk</span></code> python wrapper library instead of pyserial.
+This library is a wrapper for the picosdk implemented in C.
+This SDK provides a function to look for connected PicoScopes and get them by serial number.
+The MSP discovery routine will not detect PicoScopes because they are listed as USB devices.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure that all PicoScopes are actually mapped into the docker container.
+Otherwise, the test system won’t be able to use them.
+To check the PicoScope ports on the host system, you can use the <code class="docutils literal notranslate"><span class="pre">lsusb</span></code> command, which is part of the <code class="docutils literal notranslate"><span class="pre">usbutils</span></code> package.</p>
+</div>
+</section>
+<section id="discover-connections">
+<h2>Discover Connections<a class="headerlink" href="#discover-connections" title="Permalink to this heading"></a></h2>
+<p>Because of the already mentioned variety of possible connections, the test system must work with the minor connector type on both devices.
+On the MSP430, the smalles unit is called a pin (combined with a port, e.g., Port 6 Pin 1 = 6.1), and for the PicoScope,
+this would be a channel (D0 - D15).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is worth noting that the current implementation only detects connections to digital channels,
+but extending the functionality to analog channels would be easily possible.
+Just convert the received analog data from the PicoScope to a digital value of 0 or 1 and handle them like the other digital channels.</p>
+</div>
+<p>The idea of discovering connections is that the MSP boards should identify themselves with a known identifier
+and the PicoScopes listen for such messages.
+Therefore, each MSP pin requires a unique id which the board will continuously broadcast as a UART signal.
+This constraint means that each MSP430F5529 will broadcast 48 different ids, one for each pin.
+Though this board has a UART hardware module, it is not possible to use it in this case
+because each pin must send its id concurrently to detect connections efficiently.
+Therefore, the test system flashes the MSP with an identifier program that implements UART in software.
+A comprehensive description of this program is in section <a class="reference internal" href="#identifier-program"><span class="std std-ref">Identifier Program</span></a>.</p>
+<p>A pin identification number, further just called id, is a 40-bit number of the following form:</p>
+<img alt="../_images/device-id.svg" src="../_images/device-id.svg" /><p>The <em>Start Pattern</em> is fixed and identical for all ids and does not occur in the device id.
+It is defined as <code class="docutils literal notranslate"><span class="pre">0xFE</span></code>, so it does not occur in the port-/pin-byte because the MSP430F5529 has only eight ports with eight pins each.
+The pattern helps to find the start of an id on the receiver side and contributes to reliable results.
+The number then contains a 24-bit <em>Device ID</em>.
+This <em>Device ID</em> is unique for each MSP430 board. 24-bit should be enough to identify all physically possible connected MSPs uniquely.
+The port number is the upper 4-bits of the least significant byte, and the lower 4-bits describe the pin number.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The MSP transmits this 40-bit id to the PicoScope in UART protocol, starting with the most significant byte (5th byte).
+On the other hand, the individual bytes are transmitted according to the UART standard, beginning with the least significant bit.</p>
+</div>
+<p>An example for an id:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Example</span> <span class="n">ID</span> <span class="o">=</span> <span class="mh">0xFEDEF1CE61</span>
+ <span class="o">-</span> <span class="n">Start</span> <span class="n">Pattern</span> <span class="o">=</span> <span class="mh">0xFE</span>
+ <span class="o">-</span> <span class="n">Device</span> <span class="n">ID</span> <span class="o">=</span> <span class="mh">0xDEF1CE</span>
+ <span class="o">-</span> <span class="n">Port</span> <span class="o">=</span> <span class="mh">0x6</span> <span class="o">=</span> <span class="mi">6</span>
+ <span class="o">-</span> <span class="n">Pin</span> <span class="o">=</span> <span class="mh">0x1</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>The transmission rate is relatively low, with only 1200 baud.
+Even though a slightly higher rate would be possible (2400 baud or even 4800 baud),
+the correct timing of the signal is crucial for a reliable system.
+The reason for that is the software-controlled UART which requires significant computation time for output generation.
+On the other hand, a high transmission rate does not improve the performance because even on low 1200 baud,
+the transmission of a complete id only takes about 100ms (5 bytes with transmission pauses),
+which is neglectable to the times needed to flash the identifier programs and to configure the PicoScopes.</p>
+<section id="identifier-program">
+<h3>Identifier Program<a class="headerlink" href="#identifier-program" title="Permalink to this heading"></a></h3>
+<p>The <em>msp430-identifier</em> program is a small C program located in a subdirectory in the test system (<code class="docutils literal notranslate"><span class="pre">testsystem/msp430-identifier/</span></code>).
+This directory also contains a makefile ready to build and flash the identifier program onto MSPs.
+The program depends on the libmsp430 library and requires a script for linking,
+but the include and library paths are already preconfigured with environment variables when run with the docker container.</p>
+<p>This program’s goal is to transmit a unique id on each pin continuously.
+The program uses the UART protocol entirely implemented in software with a timer interrupt to achieve this.
+The timing is crucial for a solid UART signal.
+Therefore, the only job of the interrupt service routine is incrementing a counter.
+An increment can be done in almost no time and does not risk possible delays caused by intense computational tasks.
+A continuous loop calls the output logic with the current counter value and generates the signal.
+The advantage of this design is a precise clock for the UART signal (implemented as a counter) at the cost of a delayed output logic.
+The output delay is not a problem for the given setup with baud rates around a few 1000 because the sampling happens half-time through the bit.
+If the timer interrupt directly calls the output logic, it would skew the output to an unreadable signal because of the required computation time.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The transmitted UART signal has a baud rate of 1200, with 8 data bits, one stop bit, and no parity.</p>
+</div>
+<p>The C program file <code class="docutils literal notranslate"><span class="pre">main.c</span></code> has a placeholder for the device id.
+The discovery process loads this file and uses it as a template to generate a version for each available MSP430.
+After the test system has flashed the program to the MSP, the msp430-identifier starts by configuring the ports and timer.
+It then enters the continuous broadcasting mode, where it first transmits the <em>Start Pattern</em> and <em>Device ID</em>
+and then uses a lookup table to write the port and pin identifier as whole bytes to the ports.
+Once the program has sent all 40-bits, it waits for some time (~100ms) before it starts again.</p>
+</section>
+<section id="pico-reader">
+<h3>Pico Reader<a class="headerlink" href="#pico-reader" title="Permalink to this heading"></a></h3>
+<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PicoReader</span></code> is a python class serving as an interface
+to the PicoScope hardware during the discovery process.
+It requires a PicoScope instance and returns a list of received bytes for each channel.
+The PicoReader handles the setup and configuration for the PicoScope, reads the streamed data from the scope,
+and decodes the UART signal into a list of bytes for identification.
+The test system then compares the read ids with the known ids flashed to the MSPs.
+Identifying connections is a trivial task once the ids are in easy processable byte form.
+The PicoReader captures around 500ms of signal on all digital ports
+and checks if all received ids on a channel are identical to prevent false or missing connections.
+It uses the <em>Start Pattern</em> to identify the beginning of an id and streams the data into the respective UART decoder to get the byte list.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing the test system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, EAS Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
