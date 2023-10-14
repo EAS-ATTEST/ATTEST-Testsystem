@@ -260,16 +260,20 @@ command looks similar to this:
 Bootstrap Script
 ================
 
-The bootstrap script automates the build and start of the test system. 
+The bootstrap script automates the build and start of the production test system with a MySQL database. 
 The test system needs access to the PicoScopes and MSP430 boards connected via USB to the host. 
-The script builds the test system container if it does not exist, builds the device connection string based on the USB devices present at the host, and starts the test system container. 
-The script runs the container in detached mode. 
+The script builds the test system container if it does not exist, 
+discovers device connections present at the host, 
+and starts the test system container and a persistent database. 
+It generates a docker-compose file from the ``docker-compose-template.yml``, 
+which is used to start the containers with the correct configuration.
+The script runs the docker-compose in detached mode.
 That means the test system no longer uses the terminal after the build process and runs in the background. 
 To reattach the terminal to the test system, use the following command: 
 
 .. code-block::
 
-    docker attach --sig-proxy=false rts
+    docker attach --sig-proxy=false attest
 
 The previous command only shows the test system output. By pressing ``CTRL`` + ``C``, the
 terminal gets detached, but the test system continues in the background. To terminate
@@ -277,7 +281,7 @@ the test system, either set ``--sig-proxy`` to true when attaching or set the
 :py:attr:`~testsystem.config.Config.stop` property in the configuration.
 
 You can add an arbitrary number of arguments when calling the bootstrap script. 
-These arguments are forwarded to docker and the test system (exceptions in the following table). 
+These arguments are forwarded to the test system container (exceptions in the following table). 
 For example, you can call the test systems help menu directly with the bootstrap script:
 
 .. code-block::
@@ -288,7 +292,8 @@ For example, you can call the test systems help menu directly with the bootstrap
 The arguments in this table are an exception to those passed to docker. 
 They will be handled directly by the bootstrap script. 
 You can combine them with an arbitrary number of other arguments you want to pass to the test system. 
-The order does not matter; the bootstrap script handles arguments from the table, and all others are passed down to docker.
+The order does not matter; the bootstrap script handles arguments from the table, 
+and all others are passed down to docker.
 
 .. csv-table:: 
     :header: "Arguments", "Description"

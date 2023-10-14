@@ -52,10 +52,12 @@ When you have the docker image ready, you can inspect the available commands of 
 docker run --rm -t attest:latest python3 main.py --help
 ```
 
+The provided ``docker-compos.yml`` file is a ready-to-use setup for the test system. It combines the test system with a MySQL database for persistent storage. Adjust the environment variables and the volumes according to your system setup. The ``docker-compose-template.yml`` is used by the bootstrap script for automatically generating a compose file with the correct device configuration.
+
 ## Documentation
 For comprehensive documentation, please visit the [project website](https://eas-attest.github.io/ATTEST-Testsystem/index.html).
 
-Or you build the documentation locally by running the following command after you have the docker image ready. The documentation will be generated in the current working directory.
+Or you build the documentation locally by running the following command after you have the docker image ready. The documentation will be generated in the current working directory. 
 
 ```
 docker run --rm -t \

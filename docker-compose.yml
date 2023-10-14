@@ -17,6 +17,7 @@ services:
     depends_on: 
       - "db"
     environment:
+      ATTEST_START_DELAY: 5
       ATTEST_DB_TYPE: 'mysql'
       ATTEST_DB_USER: 'testsystem'
       ATTEST_DB_PASSWORD: 'Password1'
@@ -28,7 +29,7 @@ services:
       ATTEST_GIT_SYSTEM_PATH: 'eas/teaching/RTOS_SS99/Testsystem_Reports_SS99'
       ATTEST_TERM: 'SS99'
       ATTEST_GROUP_IDS: '1;2;3;4;5;6;7;8;9;10'
-      ATTEST_EXERCISE_NR: '6'
+      ATTEST_EXERCISE_NR: 1
     volumes:
       - host:/host
       - type: bind
