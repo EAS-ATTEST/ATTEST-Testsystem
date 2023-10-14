@@ -43,23 +43,25 @@ If you already have an MSP430 or a PicoScope connected to your host, you can che
 The test system runs in a docker container. We suggest you first build the docker image because this may take a while.
 
 ```
-docker build -t rts:latest .
+docker build -t attest:latest .
 ```
 
 When you have the docker image ready, you can inspect the available commands of the test system.
 
 ```
-docker run --rm -t rts:latest python3 main.py --help
+docker run --rm -t attest:latest python3 main.py --help
 ```
+
+The provided ``docker-compos.yml`` file is a ready-to-use setup for the test system. It combines the test system with a MySQL database for persistent storage. Adjust the environment variables and the volumes according to your system setup. The ``docker-compose-template.yml`` is used by the bootstrap script for automatically generating a compose file with the correct device configuration.
 
 ## Documentation
 For comprehensive documentation, please visit the [project website](https://eas-attest.github.io/ATTEST-Testsystem/index.html).
 
-Or you build the documentation locally by running the following command after you have the docker image ready. The documentation will be generated in the current working directory.
+Or you build the documentation locally by running the following command after you have the docker image ready. The documentation will be generated in the current working directory. 
 
 ```
 docker run --rm -t \
-    -v "$(pwd)":/host rts:latest \
+    -v "$(pwd)":/host attest:latest \
     bash -c "make html && cp -R _build/html /host/documentation"
 ```
 

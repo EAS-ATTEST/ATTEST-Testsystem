@@ -1,21 +1,21 @@
 #
 # Copyright 2023 EAS Group
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this 
-# software and associated documentation files (the “Software”), to deal in the Software 
-# without restriction, including without limitation the rights to use, copy, modify, 
-# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-# permit persons to whom the Software is furnished to do so, subject to the following 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the “Software”), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to the following
 # conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies 
+# The above copyright notice and this permission notice shall be included in all copies
 # or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
@@ -57,11 +57,6 @@ class Config:
     #:   displaying some general information.
     run_hello_testsystem: bool = False
 
-    #: | :guilabel:`env` :guilabel:`file`
-    #: | Set the database type used for persisting data. Available options are:
-    #:   ``sqlite``\ .
-    db_type: str = "sqlite"
-
     #: | Flag to enable configuration through environment variables.
     conf_enable_env: bool = True
 
@@ -73,9 +68,30 @@ class Config:
     #: | Path to the JSON config file.
     conf_file: str = "/host/config.json"
 
+    #: | :guilabel:`env` :guilabel:`file`
+    #: | Set the database type used for persisting data. Available options are:
+    #:   ``sqlite``, ``mysql`` \ .
+    db_type: str = "sqlite"
+
     #: | :guilabel:`env` :guilabel:`dyn`
     #: | Path to the Database file.
     db_file: str = "/host/testsystem.db"
+
+    #: | :guilabel:`env` :guilabel:`dyn`
+    #: | Database user name.
+    db_user: str = "testsystem"
+
+    #: | :guilabel:`env` :guilabel:`dyn`
+    #: | Database password.
+    db_password: str = "Password1"
+
+    #: | :guilabel:`env` :guilabel:`dyn`
+    #: | Database name.
+    db_database: str = "testsystem"
+
+    #: | :guilabel:`env` :guilabel:`dyn`
+    #: | Database server/host.
+    db_server: str = "127.0.0.1"
 
     #: | :guilabel:`env` :guilabel:`file`
     #: | Option to define where to wirte testsystem logs.
@@ -123,7 +139,7 @@ class Config:
 
     #: | :guilabel:`env` :guilabel:`file` :guilabel:`dyn`
     #: | Git server with all repos. You can use absolute paths to use the filesystem as
-    #    remote.
+    #:   remote.
     git_server: str = "ssh://git@iti-gitlab.tugraz.at"
 
     #: | :guilabel:`env` :guilabel:`file` :guilabel:`dyn`
@@ -158,6 +174,10 @@ class Config:
     #:   scheduling. Tag values are case-insensitive.
     force_test_tags: list[str] = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"]
 
+    #: | :guilabel:`env` :guilabel:`file`
+    #: | System start delay in seconds. This might be used to wait for the database container.
+    start_delay: int = 0
+
     def get_group_commit_link(self, group_name: str, commit_hash: str) -> str:
         sub_path = f"{self.git_student_path}/{group_name}/-/tree/{commit_hash}"
         url = utils.url_builder(self.git_server, sub_path)
@@ -170,14 +190,26 @@ def enable_logging():
 
 
 def get_config_from_env() -> dict:
-    env_prefix = "RTS_"
+    env_prefix = "ATTEST_"
     pattern = re.compile(r"{prefix}\w+".format(prefix=env_prefix))
     conf = {}
     for k, v in os.environ.items():
         if pattern.match(k):
-            if ";" in v:
-                v = v.split(";")
-            conf[k.replace(env_prefix, "")] = v
+            prop = k.replace(env_prefix, "").lower()
+            if not hasattr(Config, prop):
+                continue
+            attr = getattr(Config, prop)
+            typ = type(attr)
+            if ";" in v or typ is list:
+                if typ is not list:
+                    raise TypeError(
+                        f"Config argument '{prop}' does not accept list values."
+                    )
+                ltyp = type(attr[0])
+                val = [ltyp(e) for e in v.split(";")]
+            else:
+                val = typ(v)
+            conf[prop] = val
     return conf
 
 

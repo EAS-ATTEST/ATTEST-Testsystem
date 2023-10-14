@@ -1,0 +1,41 @@
+version: '2'
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 'secure'
+      MYSQL_DATABASE: 'testsystem'
+      MYSQL_USER: 'testsystem'
+      MYSQL_PASSWORD: 'Password1'
+    volumes:
+      - data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  attest:
+    image: attest:latest
+    container_name: attest
+    depends_on: 
+      - "db"
+    environment:
+      ATTEST_START_DELAY: 5
+      ATTEST_DB_TYPE: 'mysql'
+      ATTEST_DB_USER: 'testsystem'
+      ATTEST_DB_PASSWORD: 'Password1'
+      ATTEST_DB_DATABASE: 'testsystem'
+      ATTEST_DB_SERVER: 'db'
+      ATTEST_GIT_SERVER: 'ssh://git@iti-gitlab.tugraz.at'
+      ATTEST_GIT_PUBLIC_PATH: 'eas/teaching/RTOS_SS99'
+      ATTEST_GIT_STUDENT_PATH: 'eas/teaching/RTOS_SS99'
+      ATTEST_GIT_SYSTEM_PATH: 'eas/teaching/RTOS_SS99/Testsystem_Reports_SS99'
+      ATTEST_TERM: 'SS99'
+      ATTEST_GROUP_IDS: '1;2;3;4;5;6;7;8;9;10'
+      ATTEST_EXERCISE_NR: 1
+    volumes:
+      - host:/host
+      - type: bind
+        source: ~/.ssh
+        target: /root/.ssh
+    command: python3 main.py
+volumes:
+  data:
+  host:

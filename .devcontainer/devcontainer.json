@@ -26,10 +26,10 @@
 	"postCreateCommand": "git config --global --add safe.directory /workspaces/ATTEST-Testsystem && git config --global --unset user.email && git config --global --unset user.name",
 	"containerEnv": {
 		"PYTHONPATH": "/workspaces/ATTEST-Testsystem:/workspaces/ATTEST-Testsystem/tests/integration_tests",
-		"RTS_ROOT": "/workspaces/ATTEST-Testsystem",
-		"RTS_LOG_FILE": "testsystem.log",
-		"RTS_DB_FILE": "testsystem.db",
-		"RTS_CONF_FILE": "testsystem.json",
-		"RTS_TC_ROOT_PATH": "/workspaces/ATTEST-Testsystem/testcases"
+		"ATTEST_ROOT": "/workspaces/ATTEST-Testsystem",
+		"ATTEST_LOG_FILE": "testsystem.log",
+		"ATTEST_DB_FILE": "testsystem.db",
+		"ATTEST_CONF_FILE": "testsystem.json",
+		"ATTEST_TC_ROOT_PATH": "/workspaces/ATTEST-Testsystem/testcases"
 	}
 }

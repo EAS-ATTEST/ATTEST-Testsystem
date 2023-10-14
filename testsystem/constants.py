@@ -23,10 +23,10 @@ import os
 
 from .pico_status_constants import PICO_ERROR_CODES
 
-TESTSYSTEM_ROOT = os.environ.get("RTS_ROOT")
+TESTSYSTEM_ROOT = os.environ.get("ATTEST_ROOT")
 if TESTSYSTEM_ROOT is None:
     print(
-        "[WARNING] Define a path to the test system root directory. Use the RTS_ROOT"
+        "[WARNING] Define a path to the test system root directory. Use the ATTEST_ROOT"
         " environment variable to do that."
     )
     TESTSYSTEM_ROOT = "."

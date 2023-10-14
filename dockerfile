@@ -88,23 +88,24 @@ COPY testcases/ .
 
 # Add testsystem
 WORKDIR /testsystem
+COPY requirements.txt ./
+
+# Install python packages
+RUN pip install -r requirements.txt
+
 COPY *.py ./
 COPY index.rst ./
 COPY Makefile ./
 COPY doc/ ./doc/
 COPY tests/ ./tests/
 COPY testsystem/ ./testsystem/
-COPY requirements.txt ./
-
-# Install python packages
-RUN pip install -r requirements.txt
 
 RUN git config --global user.email "attest@testsystem.com"
 RUN git config --global user.name "ATTEST-Testsystem"
 
 ENV PYTHONPATH=/testsystem:/testsystem/tests/integration_tests
 ENV OS=unix
-ENV INCLUDES=/opt/ti/msp430-gcc/include/
+ENV INCLUDES=/root/ti/msp430-gcc/include/
 ENV FLASHTOOL_MSP430=MSP430Flasher
-ENV RTS_ROOT=/testsystem
+ENV ATTEST_ROOT=/testsystem
 ENV LC_ALL=C

@@ -11,3 +11,5 @@ pytest
 pytest-cov
 black
 tqdm
+pymysql
+cryptography
