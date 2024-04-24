@@ -1,5 +1,5 @@
 #
-# Copyright 2023 EAS Group
+# Copyright 2023-2024 EAS Group
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
 # software and associated documentation files (the “Software”), to deal in the Software
@@ -35,6 +35,8 @@ from testsystem.constants import (
     TEST_ID_LENGTH,
     TEST_BEGIN_MARKER,
     TEST_NEVER_IN_OUTPUT,
+    TEST_NEVER_IN_OUTPUT_ERROR,
+    TEST_NEVER_IN_OUTPUT_ERROR_2,
     TC_DEF_CACHE_TIME_S,
 )
 
@@ -168,11 +170,22 @@ class TestCaseDef:
         if begin == -1:
             return False
 
-        output = output[begin:]
+        output = output[begin+len(TEST_BEGIN_MARKER):]
+        logging.debug(f"Evaluating received data:")
+        log_expected_output = expected_output.replace("\n", "\\n").replace("\t", "\\t")
+        logging.debug(f"-> expected >>{log_expected_output}<<")
+        log_output = output.replace("\n", "\\n").replace("\t", "\\t")
+        logging.debug(f"-> received >>{log_output}<<")
+
+        # Cannot compare directly due to potentially appended
+        # output
+        #   output.strip() == expected_output.strip()
 
         if (
             output.find(expected_output) > -1
             and output.find(TEST_NEVER_IN_OUTPUT) == -1
+            and output.find(TEST_NEVER_IN_OUTPUT_ERROR) == -1
+            and output.find(TEST_NEVER_IN_OUTPUT_ERROR_2) == -1
         ):
             return True
         else:

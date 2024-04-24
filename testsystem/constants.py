@@ -1,5 +1,5 @@
 #
-# Copyright 2023 EAS Group
+# Copyright 2023-2024 EAS Group
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
 # software and associated documentation files (the “Software”), to deal in the Software
@@ -89,6 +89,8 @@ TEST_TESTBENCHE_DIR_NAME = "testbenches"
 TEST_DEFINITION_FILE = "testcases.txt"
 TEST_BEGIN_MARKER = "TESTCASE BEGIN\n"
 TEST_NEVER_IN_OUTPUT = "[NOT PANICED!]\n"
+TEST_NEVER_IN_OUTPUT_ERROR = "ERROR"
+TEST_NEVER_IN_OUTPUT_ERROR_2 = "error"
 TEST_HEADER_FILES = [
     "testsystem.h",
     "queueCheck.h",
