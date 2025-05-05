@@ -37,6 +37,7 @@ from testsystem.utils import run_external_task
 from testsystem.constants import (
     MSP430_FLASHER,
     MSP430_ELF_SIZE,
+    MSP430_ELF_STRIP,
     TEST_MSP430_UART_BAUDRATE,
     TEST_TIMING_RUNS,
     TEST_MAX_TIMING_RETRIES,
@@ -192,7 +193,17 @@ def measure_size(tc: TestCase):
     elffilename = (
         f"{os.path.join(tc.directory, tc.name)}.msp430f5529.LaunchPad.{tc.group_name}.elf"
     )
-    args = [f"{MSP430_ELF_SIZE}", f"{elffilename}", "-A"]
+    elffilename_nodbg = (
+        f"{os.path.join(tc.directory, tc.name)}.msp430f5529.LaunchPad.{tc.group_name}.nodbg.elf"
+    )
+
+    args = [f"{MSP430_ELF_STRIP}", "-o", f"{elffilename_nodbg}",
+                "--strip-unneeded", f"{elffilename}"]
+    code, out, err = run_external_task(args)
+    if code != 0:
+        __test_case_failed(tc, f"Failed to strip for size measurement.", f"{out}\n{err}")
+
+    args = [f"{MSP430_ELF_SIZE}", f"{elffilename_nodbg}", "-A"]
     code, out, err = run_external_task(args)
     if code == 0:
         try:

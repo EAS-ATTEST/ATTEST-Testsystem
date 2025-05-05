@@ -42,6 +42,7 @@ TESTSYSTEM_TITLE = r"""  _____ _______ ____   _____   _______        _          
 
 MSP430_ELF_GCC = "msp430-elf-gcc"
 MSP430_ELF_SIZE = "msp430-elf-size"
+MSP430_ELF_STRIP = "msp430-elf-strip"
 MSP430_FLASHER = "/bin/MSP430Flasher"
 PICOMEASURE_BINARY = "picomeasure"
 PICODETECT_BINARY = "picodetect"
