@@ -350,6 +350,7 @@ def _load_repo(local_path: str, rel_remote_path) -> str:
             f" '{conf.git_primary_branch_name}' branch."
         )
     repo.git.checkout(conf.git_primary_branch_name)
+    repo.git.reset("--hard", f"origin/{conf.git_primary_branch_name}")
     repo.git.pull()
     return repo.heads[conf.git_primary_branch_name].commit.hexsha
 
